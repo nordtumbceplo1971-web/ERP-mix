@@ -2,7 +2,15 @@
 
 通过 Tabbit CLI 研究 [易客 ERP 工作台](https://erp.yeeke.com/dashboard/workbench) 的实际业务页面，沉淀流程、领域边界和可追溯的架构建议。
 
-当前版本为0.2.0：完成首轮页面研究和第二轮API边界调查。新增店铺授权走查，并被动观察7个页面阶段的同源请求，沉淀35条页面/路径元数据及7项待验证假设。没有主动执行采集、发布、采购、发货或付费操作；页面自身发起的跟踪及偏好保存请求已单独记录。页面文案、网络元数据和端到端验证分别记录。
+当前版本为0.3.0：完成页面研究、API边界调查和本地模拟验证。保留35条API元数据与7项原站待验证假设，新增虚构业务模拟器及9项实验，用反例改进框架。没有在原站执行采集、发布、采购、发货或付费操作；页面自身发起的跟踪及偏好保存请求已单独记录。原站观察与本地模拟证据分别标记。
+
+## 启动模拟器
+
+```powershell
+npm run simulator
+```
+
+打开 http://127.0.0.1:4173 。可交互注入故障、推进任务和刷新投影。`npm run simulate` 运行9项确定性实验；使用虚构数据，进程重启后交互数据重置。详见[模拟器说明](docs/simulator.md)与[架构修订](docs/architecture-refinements.md)。
 
 ## 阅读顺序
 
@@ -12,10 +20,11 @@
 4. [证据](research/evidence.json)及[溯源映射](research/traceability.json)。
 5. [首轮更新报告](docs/iterations/0001-baseline.md)及[更新日志](CHANGELOG.md)。
 6. [外部API分析](docs/api-integration-analysis.md)、[REA方法说明](docs/rea-method.md)、[API元数据](research/api-observations.json)、[假设清单](research/hypotheses.json)及[第二轮报告](docs/iterations/0002-api-boundaries.md)。
+7. [模拟实验结果](research/simulation-results.json)与[第三轮报告](docs/iterations/0003-simulator.md)。本地实验验证自建方案，不证明原站内部实现。
 
 ## 开发环境
 
-Node.js 22+、Git、已安装并登录的 Tabbit。当前采用零依赖文档与结构化模型工程；尚未选择应用 UI 框架、数据库或实现生产后端。
+Node.js 22+、Git；原站研究需要已安装并登录的 Tabbit。模拟器自身零依赖，不需要登录。当前没有生产数据库或真实平台后端。
 
 ```powershell
 npm run check

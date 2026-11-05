@@ -283,6 +283,32 @@
         "artifact": "research/api-observations.json",
         "phase": "platform-products"
       }
+    },
+    {
+      "id": "E18",
+      "kind": "local-experiment",
+      "scope": "local-synthetic-only",
+      "level": "observed",
+      "command": "npm run simulate:record",
+      "artifact": "research/simulation-results.json",
+      "scenarioIds": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09"
+      ],
+      "facts": [
+        "9项确定性本地实验全部通过，共40项显式对比断言，另包含冲突/权限等拒绝断言",
+        "反例显示盲目重发可重复刊登，按到达顺序覆盖可回退取消状态",
+        "改进模型通过版本检查、幂等身份、对账、事务边界和投影重放检验",
+        "Tabbit simulator-ui-flow验证9项实验展示、超时对账、单次刊登及取消后的统计更新"
+      ],
+      "limitations": "仅验证自建模拟规则；无原站协议正文、真实供应商或数据库。快照恢复是内存模型的JSON恢复，不是实际崩溃耐久性。原站假设保持open。"
     }
   ]
 }

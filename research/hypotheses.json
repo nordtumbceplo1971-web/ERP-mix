@@ -1,12 +1,163 @@
 {
   "schemaVersion": 1,
   "hypotheses": [
-    {"id":"H01","level":"inferred","statement":"多平台数据在ERP后端经过统一业务接口访问","evidenceIds":["E12","E14","E15","E17"],"alternative":"后端可能仅代理实时平台查询，未建立统一存储模型","unknown":"后端连接器、缓存、部署与存储结构","nextProbe":"查看已有连接配置与受控后端调用来源；不能由同源路径直接认定","resolution":"open"},
-    {"id":"H02","level":"inferred","statement":"货源采集可能同时支持插件、导入与API来源","evidenceIds":["E02","E11","E13"],"alternative":"某些入口可能共用同一采集服务，或并非API采集","unknown":"具体货源供应商、插件协议与各入口真实实现","nextProbe":"在隔离模拟数据中逐一验证采集入口并记录来源类别","resolution":"open"},
-    {"id":"H03","level":"inferred","statement":"商品加工和刊登适合以独立异步任务编排","evidenceIds":["E04","E14","E17"],"alternative":"前端任务抽象可能来自平台任务状态代理，非独立队列","unknown":"节点、队列、调度器、幂等与失败恢复实现","nextProbe":"只读查看已有任务详情、节点历史及回执","resolution":"open"},
-    {"id":"H04","level":"inferred","statement":"经营统计可以采用与订单处理分离的查询投影","evidenceIds":["E08","E15","E16"],"alternative":"同一订单表即时聚合也能提供独立报表路由","unknown":"是否预聚合、更新周期、账单来源及统计口径","nextProbe":"对齐既有报表统计时间与只读同步记录，再在模拟数据中对账","resolution":"open"},
-    {"id":"H05","level":"unverified","statement":"订单增量同步使用Webhook并辅以定期拉取","evidenceIds":["E06","E15"],"alternative":"可能只有手动/定时拉取，或由第三方聚合服务供数","unknown":"回调是否存在、签名与去重机制、增量水位","nextProbe":"获取隔离环境后端同步日志或事件配置；浏览器列表请求无法证实","resolution":"open"},
-    {"id":"H06","level":"unverified","statement":"AI核价与创作调用外部供应商API","evidenceIds":["E07","E11"],"alternative":"可能使用内部服务、缓存或人工配置结果","unknown":"供应商、模型、输入输出schema及结果关联协议","nextProbe":"读取公开供应商配置说明或隔离环境受控调用日志，不触发付费生成","resolution":"open"},
-    {"id":"H07","level":"unverified","statement":"平台连接使用OAuth并自动续期","evidenceIds":["E10","E12"],"alternative":"不同平台可能采用不同授权协议或人工续期","unknown":"各平台真实授权机制及生命周期","nextProbe":"只读查看授权帮助/状态说明；不读取Token或启动重新授权","resolution":"open"}
+    {
+      "id": "H01",
+      "level": "inferred",
+      "statement": "多平台数据在ERP后端经过统一业务接口访问",
+      "evidenceIds": [
+        "E12",
+        "E14",
+        "E15",
+        "E17"
+      ],
+      "alternative": "后端可能仅代理实时平台查询，未建立统一存储模型",
+      "unknown": "后端连接器、缓存、部署与存储结构",
+      "nextProbe": "查看已有连接配置与受控后端调用来源；不能由同源路径直接认定",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "design-exercised-not-site-verified",
+        "scenarioIds": [
+          "S05",
+          "S08"
+        ],
+        "originalImplementationResolution": "open"
+      }
+    },
+    {
+      "id": "H02",
+      "level": "inferred",
+      "statement": "货源采集可能同时支持插件、导入与API来源",
+      "evidenceIds": [
+        "E02",
+        "E11",
+        "E13"
+      ],
+      "alternative": "某些入口可能共用同一采集服务，或并非API采集",
+      "unknown": "具体货源供应商、插件协议与各入口真实实现",
+      "nextProbe": "在隔离模拟数据中逐一验证采集入口并记录来源类别",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "design-exercised-not-site-verified",
+        "scenarioIds": [
+          "S01"
+        ],
+        "originalImplementationResolution": "open"
+      }
+    },
+    {
+      "id": "H03",
+      "level": "inferred",
+      "statement": "商品加工和刊登适合以独立异步任务编排",
+      "evidenceIds": [
+        "E04",
+        "E14",
+        "E17"
+      ],
+      "alternative": "前端任务抽象可能来自平台任务状态代理，非独立队列",
+      "unknown": "节点、队列、调度器、幂等与失败恢复实现",
+      "nextProbe": "只读查看已有任务详情、节点历史及回执",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "design-exercised-not-site-verified",
+        "scenarioIds": [
+          "S01",
+          "S02",
+          "S03",
+          "S04",
+          "S09"
+        ],
+        "originalImplementationResolution": "open"
+      }
+    },
+    {
+      "id": "H04",
+      "level": "inferred",
+      "statement": "经营统计可以采用与订单处理分离的查询投影",
+      "evidenceIds": [
+        "E08",
+        "E15",
+        "E16"
+      ],
+      "alternative": "同一订单表即时聚合也能提供独立报表路由",
+      "unknown": "是否预聚合、更新周期、账单来源及统计口径",
+      "nextProbe": "对齐既有报表统计时间与只读同步记录，再在模拟数据中对账",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "design-exercised-not-site-verified",
+        "scenarioIds": [
+          "S07"
+        ],
+        "originalImplementationResolution": "open"
+      }
+    },
+    {
+      "id": "H05",
+      "level": "unverified",
+      "statement": "订单增量同步使用Webhook并辅以定期拉取",
+      "evidenceIds": [
+        "E06",
+        "E15"
+      ],
+      "alternative": "可能只有手动/定时拉取，或由第三方聚合服务供数",
+      "unknown": "回调是否存在、签名与去重机制、增量水位",
+      "nextProbe": "获取隔离环境后端同步日志或事件配置；浏览器列表请求无法证实",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "design-exercised-not-site-verified",
+        "scenarioIds": [
+          "S05",
+          "S06",
+          "S09"
+        ],
+        "originalImplementationResolution": "open"
+      }
+    },
+    {
+      "id": "H06",
+      "level": "unverified",
+      "statement": "AI核价与创作调用外部供应商API",
+      "evidenceIds": [
+        "E07",
+        "E11"
+      ],
+      "alternative": "可能使用内部服务、缓存或人工配置结果",
+      "unknown": "供应商、模型、输入输出schema及结果关联协议",
+      "nextProbe": "读取公开供应商配置说明或隔离环境受控调用日志，不触发付费生成",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "not-modeled",
+        "scenarioIds": [],
+        "originalImplementationResolution": "open"
+      }
+    },
+    {
+      "id": "H07",
+      "level": "unverified",
+      "statement": "平台连接使用OAuth并自动续期",
+      "evidenceIds": [
+        "E10",
+        "E12"
+      ],
+      "alternative": "不同平台可能采用不同授权协议或人工续期",
+      "unknown": "各平台真实授权机制及生命周期",
+      "nextProbe": "只读查看授权帮助/状态说明；不读取Token或启动重新授权",
+      "resolution": "open",
+      "simulationAssessment": {
+        "evidenceId": "E18",
+        "status": "design-exercised-not-site-verified",
+        "scenarioIds": [
+          "S04",
+          "S08"
+        ],
+        "originalImplementationResolution": "open"
+      }
+    }
   ]
 }

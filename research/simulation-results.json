@@ -1,0 +1,1098 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-synthetic-only",
+  "simulatorVersion": "0.3.0",
+  "deterministic": true,
+  "scenarios": [
+    {
+      "id": "S01",
+      "title": "仅采集、核对、分店认领和暂停恢复",
+      "evidenceIds": [
+        "E03",
+        "E04",
+        "E10",
+        "E14"
+      ],
+      "hypothesisIds": [
+        "H02",
+        "H03"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "仅采集不自动创建任务",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "重复认领复用同一任务",
+          "actual": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+          "expected": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+          "passed": true
+        },
+        {
+          "name": "目标店铺不同则任务不同",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "暂停不推进",
+          "actual": "PAUSED",
+          "expected": "PAUSED",
+          "passed": true
+        },
+        {
+          "name": "正常刊登完成",
+          "actual": "COMPLETED",
+          "expected": "COMPLETED",
+          "passed": true
+        },
+        {
+          "name": "平台状态独立于任务状态",
+          "actual": "ON_SALE",
+          "expected": "ON_SALE",
+          "passed": true
+        }
+      ],
+      "finding": "认领身份应包含目标店铺和输入版本；仅采集与创建任务必须分开。",
+      "audit": [
+        {
+          "sequence": 1,
+          "at": 0,
+          "type": "StoreConnected",
+          "tenant": "demo",
+          "shop": "shop-a"
+        },
+        {
+          "sequence": 2,
+          "at": 0,
+          "type": "ProductCollected",
+          "tenant": "demo",
+          "source": "mock-source",
+          "externalId": "product-1"
+        },
+        {
+          "sequence": 3,
+          "at": 0,
+          "type": "DraftReviewed",
+          "tenant": "demo",
+          "draftKey": "[\"demo\",\"mock-source\",\"product-1\"]",
+          "revision": 1
+        },
+        {
+          "sequence": 4,
+          "at": 0,
+          "type": "WorkflowClaimed",
+          "tenant": "demo",
+          "shop": "shop-a",
+          "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]"
+        },
+        {
+          "sequence": 5,
+          "at": 0,
+          "type": "StoreConnected",
+          "tenant": "demo",
+          "shop": "shop-b"
+        },
+        {
+          "sequence": 6,
+          "at": 0,
+          "type": "WorkflowClaimed",
+          "tenant": "demo",
+          "shop": "shop-b",
+          "jobKey": "[\"demo\",\"shop-b\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]"
+        },
+        {
+          "sequence": 7,
+          "at": 0,
+          "type": "WorkflowPaused",
+          "tenant": "demo",
+          "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]"
+        },
+        {
+          "sequence": 8,
+          "at": 0,
+          "type": "WorkflowResumed",
+          "tenant": "demo",
+          "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]"
+        },
+        {
+          "sequence": 9,
+          "at": 0,
+          "type": "WorkflowAdvanced",
+          "tenant": "demo",
+          "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+          "before": "QUEUED",
+          "after": "RUNNING"
+        },
+        {
+          "sequence": 10,
+          "at": 0,
+          "type": "WorkflowAdvanced",
+          "tenant": "demo",
+          "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+          "before": "RUNNING",
+          "after": "READY_TO_PUBLISH"
+        },
+        {
+          "sequence": 11,
+          "at": 0,
+          "type": "WorkflowAdvanced",
+          "tenant": "demo",
+          "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+          "before": "READY_TO_PUBLISH",
+          "after": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "核对后编辑造成的过期输入",
+      "evidenceIds": [
+        "E03",
+        "E05"
+      ],
+      "hypothesisIds": [
+        "H03"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "过期任务被阻止",
+          "actual": "FAILED",
+          "expected": "FAILED",
+          "passed": true
+        },
+        {
+          "name": "失败原因可区分",
+          "actual": "STALE_INPUT",
+          "expected": "STALE_INPUT",
+          "passed": true
+        },
+        {
+          "name": "未产生平台商品",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "新版本产生新任务",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        }
+      ],
+      "finding": "任务需固定输入版本；人工编辑应使旧核对失效，不能读取随时变化的草稿。"
+    },
+    {
+      "id": "S03",
+      "title": "平台已受理但本地超时，重启后对账",
+      "evidenceIds": [
+        "E04",
+        "E14",
+        "E17"
+      ],
+      "hypothesisIds": [
+        "H03"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "超时保留未知结果",
+          "actual": "RECONCILE_REQUIRED",
+          "expected": "RECONCILE_REQUIRED",
+          "passed": true
+        },
+        {
+          "name": "对账确认完成",
+          "actual": "COMPLETED",
+          "expected": "COMPLETED",
+          "passed": true
+        },
+        {
+          "name": "实际平台商品只有一个",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "未盲目再次提交",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "反例：超时后盲重试生成两个商品",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        }
+      ],
+      "baseline": {
+        "duplicateListings": 2
+      },
+      "guarded": {
+        "listings": 1,
+        "submissions": 1
+      },
+      "finding": "发布应独立记录不确定结果，通过幂等键与回执查询恢复；不能把超时直接当失败重试。"
+    },
+    {
+      "id": "S04",
+      "title": "限流等待与授权失效分别恢复",
+      "evidenceIds": [
+        "E04",
+        "E12",
+        "E14"
+      ],
+      "hypothesisIds": [
+        "H03",
+        "H07"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "立即重试保持等待",
+          "actual": "RETRY_WAIT",
+          "expected": "RETRY_WAIT",
+          "passed": true
+        },
+        {
+          "name": "等待期间没有再次提交",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "授权失效进入独立队列",
+          "actual": "WAITING_AUTH",
+          "expected": "WAITING_AUTH",
+          "passed": true
+        },
+        {
+          "name": "恢复后刊登成功",
+          "actual": "COMPLETED",
+          "expected": "COMPLETED",
+          "passed": true
+        }
+      ],
+      "finding": "授权等待、限流等待和人工暂停应分别建模，避免统一错误重试造成无效流量。"
+    },
+    {
+      "id": "S05",
+      "title": "重复和乱序订单不会覆盖较新取消状态",
+      "evidenceIds": [
+        "E06",
+        "E15"
+      ],
+      "hypothesisIds": [
+        "H01",
+        "H05"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "反例：最后到达覆盖导致取消回退",
+          "actual": "PENDING",
+          "expected": "PENDING",
+          "passed": true
+        },
+        {
+          "name": "重复与过期事件被区分",
+          "actual": [
+            "APPLIED",
+            "APPLIED",
+            "DUPLICATE",
+            "STALE"
+          ],
+          "expected": [
+            "APPLIED",
+            "APPLIED",
+            "DUPLICATE",
+            "STALE"
+          ],
+          "passed": true
+        },
+        {
+          "name": "正确有效订单数",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "正确取消订单数",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        }
+      ],
+      "baseline": {
+        "finalStatus": "PENDING"
+      },
+      "guarded": {
+        "model": "synthetic-v1-excludes-cancelled",
+        "currencies": {
+          "CNY": {
+            "totalOrders": 1,
+            "cancelledOrders": 1,
+            "effectiveOrders": 0,
+            "effectiveAmountMinor": 0
+          }
+        },
+        "projectedThrough": 2,
+        "pendingEvents": 0
+      },
+      "finding": "幂等事件身份与业务对象版本都必需；只做其中一种仍无法解决乱序覆盖。"
+    },
+    {
+      "id": "S06",
+      "title": "同步批次失败后，订单、收件箱、事件和游标一起回滚",
+      "evidenceIds": [
+        "E15"
+      ],
+      "hypothesisIds": [
+        "H05"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "失败批次无订单残留",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "失败批次未推进游标",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "失败批次未残留幂等记录",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "失败批次未发出统计事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "同页重试完整恢复",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        }
+      ],
+      "finding": "游标必须与订单、收件箱及待投递事件同一事务提交；游标比较可阻止陈旧同步器覆盖进度。"
+    },
+    {
+      "id": "S07",
+      "title": "统计延迟、重启重放、取消与多币种",
+      "evidenceIds": [
+        "E08",
+        "E09",
+        "E16"
+      ],
+      "hypothesisIds": [
+        "H04"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "同步完成不等于统计已更新",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "重放没有重复金额",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "人民币按最小单位计数",
+          "actual": 1000,
+          "expected": 1000,
+          "passed": true
+        },
+        {
+          "name": "美元单独汇总",
+          "actual": 299,
+          "expected": 299,
+          "passed": true
+        },
+        {
+          "name": "取消后撤销有效金额",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "取消不影响其他币种",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        }
+      ],
+      "guarded": {
+        "model": "synthetic-v1-excludes-cancelled",
+        "currencies": {
+          "CNY": {
+            "totalOrders": 1,
+            "cancelledOrders": 1,
+            "effectiveOrders": 0,
+            "effectiveAmountMinor": 0
+          },
+          "USD": {
+            "totalOrders": 1,
+            "cancelledOrders": 0,
+            "effectiveOrders": 1,
+            "effectiveAmountMinor": 299
+          }
+        },
+        "projectedThrough": 3,
+        "pendingEvents": 0
+      },
+      "finding": "统计应使用按对象版本替换的投影，并显式显示积压；不能简单累加每次同步的金额，也不能直接相加不同币种。"
+    },
+    {
+      "id": "S08",
+      "title": "跨租户/店铺身份与能力隔离",
+      "evidenceIds": [
+        "E12",
+        "E15",
+        "E17"
+      ],
+      "hypothesisIds": [
+        "H01",
+        "H07"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "相同外部订单ID仍为三个对象",
+          "actual": 3,
+          "expected": 3,
+          "passed": true
+        },
+        {
+          "name": "租户统计隔离",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "跨租户批次没有污染状态",
+          "actual": {
+            "schemaVersion": 1,
+            "clock": 0,
+            "sequence": 12,
+            "stores": {
+              "[\"demo\",\"shop-a\"]": {
+                "tenant": "demo",
+                "shop": "shop-a",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "publish",
+                  "orders"
+                ],
+                "authorized": true
+              },
+              "[\"demo\",\"shop-b\"]": {
+                "tenant": "demo",
+                "shop": "shop-b",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "publish",
+                  "orders"
+                ],
+                "authorized": true
+              },
+              "[\"other\",\"shop-a\"]": {
+                "tenant": "other",
+                "shop": "shop-a",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "publish",
+                  "orders"
+                ],
+                "authorized": true
+              },
+              "[\"demo\",\"read-only\"]": {
+                "tenant": "demo",
+                "shop": "read-only",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "orders"
+                ],
+                "authorized": true
+              }
+            },
+            "drafts": {
+              "[\"demo\",\"mock-source\",\"product-1\"]": {
+                "tenant": "demo",
+                "source": "mock-source",
+                "externalId": "product-1",
+                "title": "虚构商品",
+                "revision": 1,
+                "reviewedRevision": 1
+              }
+            },
+            "jobs": {
+              "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]": {
+                "tenant": "demo",
+                "shop": "shop-a",
+                "draftKey": "[\"demo\",\"mock-source\",\"product-1\"]",
+                "revision": 1,
+                "title": "虚构商品",
+                "state": "READY_TO_PUBLISH",
+                "attempt": 0,
+                "nextAt": 0,
+                "idempotencyKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+                "receipt": null
+              }
+            },
+            "externalListings": {},
+            "orders": {
+              "[\"demo\",\"shop-a\",\"order-1\"]": {
+                "tenant": "demo",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1,
+                "status": "PENDING",
+                "amountMinor": 1000,
+                "currency": "CNY"
+              },
+              "[\"demo\",\"shop-b\",\"order-1\"]": {
+                "tenant": "demo",
+                "shop": "shop-b",
+                "externalId": "order-1",
+                "version": 1,
+                "status": "PENDING",
+                "amountMinor": 1000,
+                "currency": "CNY"
+              },
+              "[\"other\",\"shop-a\",\"order-1\"]": {
+                "tenant": "other",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1,
+                "status": "PENDING",
+                "amountMinor": 1000,
+                "currency": "CNY"
+              }
+            },
+            "inbox": {
+              "[\"demo\",\"shop-a\",\"evt-1\"]": "{\"tenant\":\"demo\",\"shop\":\"shop-a\",\"externalId\":\"order-1\",\"version\":1,\"status\":\"PENDING\",\"amountMinor\":1000,\"currency\":\"CNY\"}",
+              "[\"demo\",\"shop-b\",\"evt-1\"]": "{\"tenant\":\"demo\",\"shop\":\"shop-b\",\"externalId\":\"order-1\",\"version\":1,\"status\":\"PENDING\",\"amountMinor\":1000,\"currency\":\"CNY\"}",
+              "[\"other\",\"shop-a\",\"evt-1\"]": "{\"tenant\":\"other\",\"shop\":\"shop-a\",\"externalId\":\"order-1\",\"version\":1,\"status\":\"PENDING\",\"amountMinor\":1000,\"currency\":\"CNY\"}"
+            },
+            "cursors": {},
+            "outbox": [
+              {
+                "id": 1,
+                "orderKey": "[\"demo\",\"shop-a\",\"order-1\"]",
+                "snapshot": {
+                  "tenant": "demo",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              },
+              {
+                "id": 2,
+                "orderKey": "[\"demo\",\"shop-b\",\"order-1\"]",
+                "snapshot": {
+                  "tenant": "demo",
+                  "shop": "shop-b",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              },
+              {
+                "id": 3,
+                "orderKey": "[\"other\",\"shop-a\",\"order-1\"]",
+                "snapshot": {
+                  "tenant": "other",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              }
+            ],
+            "projection": {
+              "applied": [
+                1,
+                2,
+                3
+              ],
+              "orders": {
+                "[\"demo\",\"shop-a\",\"order-1\"]": {
+                  "tenant": "demo",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                },
+                "[\"demo\",\"shop-b\",\"order-1\"]": {
+                  "tenant": "demo",
+                  "shop": "shop-b",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                },
+                "[\"other\",\"shop-a\",\"order-1\"]": {
+                  "tenant": "other",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              },
+              "through": 3
+            },
+            "audit": [
+              {
+                "sequence": 1,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "demo",
+                "shop": "shop-a"
+              },
+              {
+                "sequence": 2,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "demo",
+                "shop": "shop-b"
+              },
+              {
+                "sequence": 3,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "other",
+                "shop": "shop-a"
+              },
+              {
+                "sequence": 4,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "demo",
+                "shop": "read-only"
+              },
+              {
+                "sequence": 5,
+                "at": 0,
+                "type": "OrderAccepted",
+                "tenant": "demo",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1
+              },
+              {
+                "sequence": 6,
+                "at": 0,
+                "type": "OrderAccepted",
+                "tenant": "demo",
+                "shop": "shop-b",
+                "externalId": "order-1",
+                "version": 1
+              },
+              {
+                "sequence": 7,
+                "at": 0,
+                "type": "OrderAccepted",
+                "tenant": "other",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1
+              },
+              {
+                "sequence": 8,
+                "at": 0,
+                "type": "ProductCollected",
+                "tenant": "demo",
+                "source": "mock-source",
+                "externalId": "product-1"
+              },
+              {
+                "sequence": 9,
+                "at": 0,
+                "type": "DraftReviewed",
+                "tenant": "demo",
+                "draftKey": "[\"demo\",\"mock-source\",\"product-1\"]",
+                "revision": 1
+              },
+              {
+                "sequence": 10,
+                "at": 0,
+                "type": "WorkflowClaimed",
+                "tenant": "demo",
+                "shop": "shop-a",
+                "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]"
+              },
+              {
+                "sequence": 11,
+                "at": 0,
+                "type": "WorkflowAdvanced",
+                "tenant": "demo",
+                "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+                "before": "QUEUED",
+                "after": "RUNNING"
+              },
+              {
+                "sequence": 12,
+                "at": 0,
+                "type": "WorkflowAdvanced",
+                "tenant": "demo",
+                "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+                "before": "RUNNING",
+                "after": "READY_TO_PUBLISH"
+              }
+            ]
+          },
+          "expected": {
+            "schemaVersion": 1,
+            "clock": 0,
+            "sequence": 12,
+            "stores": {
+              "[\"demo\",\"shop-a\"]": {
+                "tenant": "demo",
+                "shop": "shop-a",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "publish",
+                  "orders"
+                ],
+                "authorized": true
+              },
+              "[\"demo\",\"shop-b\"]": {
+                "tenant": "demo",
+                "shop": "shop-b",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "publish",
+                  "orders"
+                ],
+                "authorized": true
+              },
+              "[\"other\",\"shop-a\"]": {
+                "tenant": "other",
+                "shop": "shop-a",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "publish",
+                  "orders"
+                ],
+                "authorized": true
+              },
+              "[\"demo\",\"read-only\"]": {
+                "tenant": "demo",
+                "shop": "read-only",
+                "platform": "mock-platform",
+                "capabilities": [
+                  "orders"
+                ],
+                "authorized": true
+              }
+            },
+            "drafts": {
+              "[\"demo\",\"mock-source\",\"product-1\"]": {
+                "tenant": "demo",
+                "source": "mock-source",
+                "externalId": "product-1",
+                "title": "虚构商品",
+                "revision": 1,
+                "reviewedRevision": 1
+              }
+            },
+            "jobs": {
+              "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]": {
+                "tenant": "demo",
+                "shop": "shop-a",
+                "draftKey": "[\"demo\",\"mock-source\",\"product-1\"]",
+                "revision": 1,
+                "title": "虚构商品",
+                "state": "READY_TO_PUBLISH",
+                "attempt": 0,
+                "nextAt": 0,
+                "idempotencyKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+                "receipt": null
+              }
+            },
+            "externalListings": {},
+            "orders": {
+              "[\"demo\",\"shop-a\",\"order-1\"]": {
+                "tenant": "demo",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1,
+                "status": "PENDING",
+                "amountMinor": 1000,
+                "currency": "CNY"
+              },
+              "[\"demo\",\"shop-b\",\"order-1\"]": {
+                "tenant": "demo",
+                "shop": "shop-b",
+                "externalId": "order-1",
+                "version": 1,
+                "status": "PENDING",
+                "amountMinor": 1000,
+                "currency": "CNY"
+              },
+              "[\"other\",\"shop-a\",\"order-1\"]": {
+                "tenant": "other",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1,
+                "status": "PENDING",
+                "amountMinor": 1000,
+                "currency": "CNY"
+              }
+            },
+            "inbox": {
+              "[\"demo\",\"shop-a\",\"evt-1\"]": "{\"tenant\":\"demo\",\"shop\":\"shop-a\",\"externalId\":\"order-1\",\"version\":1,\"status\":\"PENDING\",\"amountMinor\":1000,\"currency\":\"CNY\"}",
+              "[\"demo\",\"shop-b\",\"evt-1\"]": "{\"tenant\":\"demo\",\"shop\":\"shop-b\",\"externalId\":\"order-1\",\"version\":1,\"status\":\"PENDING\",\"amountMinor\":1000,\"currency\":\"CNY\"}",
+              "[\"other\",\"shop-a\",\"evt-1\"]": "{\"tenant\":\"other\",\"shop\":\"shop-a\",\"externalId\":\"order-1\",\"version\":1,\"status\":\"PENDING\",\"amountMinor\":1000,\"currency\":\"CNY\"}"
+            },
+            "cursors": {},
+            "outbox": [
+              {
+                "id": 1,
+                "orderKey": "[\"demo\",\"shop-a\",\"order-1\"]",
+                "snapshot": {
+                  "tenant": "demo",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              },
+              {
+                "id": 2,
+                "orderKey": "[\"demo\",\"shop-b\",\"order-1\"]",
+                "snapshot": {
+                  "tenant": "demo",
+                  "shop": "shop-b",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              },
+              {
+                "id": 3,
+                "orderKey": "[\"other\",\"shop-a\",\"order-1\"]",
+                "snapshot": {
+                  "tenant": "other",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              }
+            ],
+            "projection": {
+              "applied": [
+                1,
+                2,
+                3
+              ],
+              "orders": {
+                "[\"demo\",\"shop-a\",\"order-1\"]": {
+                  "tenant": "demo",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                },
+                "[\"demo\",\"shop-b\",\"order-1\"]": {
+                  "tenant": "demo",
+                  "shop": "shop-b",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                },
+                "[\"other\",\"shop-a\",\"order-1\"]": {
+                  "tenant": "other",
+                  "shop": "shop-a",
+                  "externalId": "order-1",
+                  "version": 1,
+                  "status": "PENDING",
+                  "amountMinor": 1000,
+                  "currency": "CNY"
+                }
+              },
+              "through": 3
+            },
+            "audit": [
+              {
+                "sequence": 1,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "demo",
+                "shop": "shop-a"
+              },
+              {
+                "sequence": 2,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "demo",
+                "shop": "shop-b"
+              },
+              {
+                "sequence": 3,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "other",
+                "shop": "shop-a"
+              },
+              {
+                "sequence": 4,
+                "at": 0,
+                "type": "StoreConnected",
+                "tenant": "demo",
+                "shop": "read-only"
+              },
+              {
+                "sequence": 5,
+                "at": 0,
+                "type": "OrderAccepted",
+                "tenant": "demo",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1
+              },
+              {
+                "sequence": 6,
+                "at": 0,
+                "type": "OrderAccepted",
+                "tenant": "demo",
+                "shop": "shop-b",
+                "externalId": "order-1",
+                "version": 1
+              },
+              {
+                "sequence": 7,
+                "at": 0,
+                "type": "OrderAccepted",
+                "tenant": "other",
+                "shop": "shop-a",
+                "externalId": "order-1",
+                "version": 1
+              },
+              {
+                "sequence": 8,
+                "at": 0,
+                "type": "ProductCollected",
+                "tenant": "demo",
+                "source": "mock-source",
+                "externalId": "product-1"
+              },
+              {
+                "sequence": 9,
+                "at": 0,
+                "type": "DraftReviewed",
+                "tenant": "demo",
+                "draftKey": "[\"demo\",\"mock-source\",\"product-1\"]",
+                "revision": 1
+              },
+              {
+                "sequence": 10,
+                "at": 0,
+                "type": "WorkflowClaimed",
+                "tenant": "demo",
+                "shop": "shop-a",
+                "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]"
+              },
+              {
+                "sequence": 11,
+                "at": 0,
+                "type": "WorkflowAdvanced",
+                "tenant": "demo",
+                "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+                "before": "QUEUED",
+                "after": "RUNNING"
+              },
+              {
+                "sequence": 12,
+                "at": 0,
+                "type": "WorkflowAdvanced",
+                "tenant": "demo",
+                "jobKey": "[\"demo\",\"shop-a\",\"[\\\"demo\\\",\\\"mock-source\\\",\\\"product-1\\\"]\",1]",
+                "before": "RUNNING",
+                "after": "READY_TO_PUBLISH"
+              }
+            ]
+          },
+          "passed": true
+        }
+      ],
+      "finding": "外部ID和事件ID必须绑定租户与店铺；连接器能力检查不应只依赖前端按钮隐藏。"
+    },
+    {
+      "id": "S09",
+      "title": "同一身份的冲突事件隔离，未知发布结果不自动重发",
+      "evidenceIds": [
+        "E14",
+        "E15"
+      ],
+      "hypothesisIds": [
+        "H03",
+        "H05"
+      ],
+      "status": "passed",
+      "checks": [
+        {
+          "name": "冲突未增加事件",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "查不到回执仍保持不确定",
+          "actual": "RECONCILE_REQUIRED",
+          "expected": "RECONCILE_REQUIRED",
+          "passed": true
+        },
+        {
+          "name": "没有盲重发",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        }
+      ],
+      "finding": "重复键却不同内容应进入冲突处理；查不到回执不等同于平台明确拒绝，需要继续对账或人工介入。"
+    }
+  ]
+}

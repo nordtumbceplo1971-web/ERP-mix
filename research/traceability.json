@@ -33,6 +33,15 @@
         "E17"
       ],
       "deliveryNotes": "采用REA调查原则，以Tabbit采集35条脱敏页面/路径记录；未运行REA原生工具。"
+    },
+    {
+      "id": "0003-simulator",
+      "report": "docs/iterations/0003-simulator.md",
+      "changelogVersion": "0.3.0",
+      "evidenceIds": [
+        "E18"
+      ],
+      "deliveryNotes": "本地虚构模拟器、9项实验、40项显式对比断言与50组乱序检验；不将模拟观察当作原站实现证据。"
     }
   ],
   "claims": [
@@ -199,6 +208,54 @@
         "docs/rea-method.md",
         "docs/api-integration-analysis.md",
         "docs/iterations/0002-api-boundaries.md"
+      ]
+    },
+    {
+      "id": "C12",
+      "level": "observed",
+      "statement": "本地模拟器9项实验及故障对比通过，证据范围仅限自建模型",
+      "evidenceIds": [
+        "E18"
+      ],
+      "documents": [
+        "docs/simulator.md",
+        "docs/iterations/0003-simulator.md"
+      ]
+    },
+    {
+      "id": "C13",
+      "level": "inferred",
+      "statement": "根据原站线索与本地反例，补充输入版本、发布对账、同步事务和版本化统计投影",
+      "evidenceIds": [
+        "E03",
+        "E04",
+        "E10",
+        "E12",
+        "E14",
+        "E15",
+        "E16",
+        "E17",
+        "E18"
+      ],
+      "documents": [
+        "docs/architecture-refinements.md",
+        "docs/architecture.md"
+      ]
+    },
+    {
+      "id": "C14",
+      "level": "observed",
+      "statement": "本地模拟器提供6个同名查询入口，返回体明确为自建契约而非原站schema",
+      "evidenceIds": [
+        "E12",
+        "E13",
+        "E14",
+        "E15",
+        "E16",
+        "E18"
+      ],
+      "documents": [
+        "docs/simulator.md"
       ]
     }
   ]
