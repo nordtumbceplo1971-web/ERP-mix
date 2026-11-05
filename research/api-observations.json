@@ -1,0 +1,431 @@
+{
+  "capturedOn": "2026-11-05",
+  "coverage": "Bounded samples; no request replay, headers, query values, payloads or business rows",
+  "dropped": 0,
+  "endpoints": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/collection/common/config/queryByUser",
+      "phase": "collect-config",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E11"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/collection/shop-template-binding/list",
+      "phase": "collect-config",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E11"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/ai/sourcing-pricing/config",
+      "phase": "collect-config",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E11"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/track/collect",
+      "phase": "collect-config",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E11"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/shop/info/auth/platform/statistics",
+      "phase": "store-authorization",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E12"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/shop/info/group/list",
+      "phase": "store-authorization",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E12"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/shop/info/list",
+      "phase": "store-authorization",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E12"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/list",
+      "phase": "collection-list",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E13"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/claim/count",
+      "phase": "collection-list",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E13"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/user/list",
+      "phase": "collection-list",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E13"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/label/list",
+      "phase": "collection-list",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E13"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/workflow/label/list",
+      "phase": "listing-jobs",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E14"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/workflow/list",
+      "phase": "listing-jobs",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E14"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/workflow/statistics",
+      "phase": "listing-jobs",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E14"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/shops",
+      "phase": "listing-jobs",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E14"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/sites",
+      "phase": "listing-jobs",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E14"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/track/collect",
+      "phase": "listing-jobs",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E14"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/orders/platformStatusEnums",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/orders/queryOrderList",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/shop/info/all",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/orders/tag/listAll",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/orders/tag/listAllEnabled",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/orders/shopTypes",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/orders/statistics/statusCount",
+      "phase": "orders",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E15"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/sales/store-stats/filter-opts",
+      "phase": "store-stats",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E16"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/sales/store-stats/page",
+      "phase": "store-stats",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E16"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/sales/store-stats/list",
+      "phase": "store-stats",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E16"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/pipeline/collection/shops",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "GET"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/optimize/online-product/batch-edit/progress",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/optimize/online-product/category-options",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/optimize/online-product/list",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/optimize/online-product/size-chart/missing-count",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/optimize/online-product/statistics",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "POST"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/erp/optimize/online-product/item-status/counts",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    },
+    {
+      "methods": [
+        "PUT"
+      ],
+      "origin": "https://erp.yeeke.com",
+      "path": "/erp-boot/sys/userPreference/save",
+      "phase": "platform-products",
+      "statuses": [
+        200
+      ],
+      "evidenceId": "E17"
+    }
+  ],
+  "schemaVersion": 1,
+  "scope": "Selected same-origin ERP request metadata only",
+  "timezone": "Asia/Shanghai",
+  "transport": "Tabbit CLI page-scoped CDP"
+}

@@ -2,6 +2,7 @@ import { readFile, access, readdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateApiObservations, validateHypotheses } from './research-validation.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = async path => readFile(resolve(root, path), 'utf8');
@@ -45,4 +46,14 @@ for (const iteration of trace.iterations) {
 for (const name of await readdir(resolve(root, 'docs/iterations'))) {
   if (name.endsWith('.md')) assert(indexed.has(`docs/iterations/${name}`), `Unindexed report: ${name}`);
 }
-console.log(`Validated ${ids.size} evidence records, ${claims.size} claims, ${indexed.size} iteration reports.`);
+const api = JSON.parse(await read('research/api-observations.json'));
+const hypotheses = JSON.parse(await read('research/hypotheses.json'));
+validateApiObservations(api, ids);
+validateHypotheses(hypotheses, ids);
+for (const item of evidence.evidence) {
+  if (!item.capture) continue;
+  await exists(item.capture.artifact);
+  assert.equal(item.capture.artifact, 'research/api-observations.json');
+  assert(api.endpoints.some(row => row.evidenceId === item.id && row.phase === item.capture.phase), `Capture missing for ${item.id}`);
+}
+console.log(`Validated ${ids.size} evidence records, ${claims.size} claims, ${indexed.size} iteration reports, ${api.endpoints.length} API observations, ${hypotheses.hypotheses.length} hypotheses.`);

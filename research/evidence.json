@@ -7,82 +7,282 @@
     {
       "id": "E01",
       "url": "https://erp.yeeke.com/dashboard/workbench",
-      "requestIds": ["inspect-auth", "after-collection"],
+      "requestIds": [
+        "inspect-auth",
+        "after-collection"
+      ],
       "level": "observed",
-      "facts": ["首页、产品、订单、数据、营销导航", "经营总览具有平台、统计周期、订单口径控件", "商品采集、AI产品工厂、AI营销推广、订单成交概览", "待处理、待打单、待揽收、搁置、取消等订单提醒", "升级、AI豆充值、推广合作等独立商业入口"],
+      "facts": [
+        "首页、产品、订单、数据、营销导航",
+        "经营总览具有平台、统计周期、订单口径控件",
+        "商品采集、AI产品工厂、AI营销推广、订单成交概览",
+        "待处理、待打单、待揽收、搁置、取消等订单提醒",
+        "升级、AI豆充值、推广合作等独立商业入口"
+      ],
       "limitations": "完整快照被截断，另以有界正文检查补充；不保留账号、金额、企业及店铺数据。"
     },
     {
       "id": "E02",
       "url": "https://erp.yeeke.com/product/selectionCenter",
-      "requestIds": ["sourcing-state"],
+      "requestIds": [
+        "sourcing-state"
+      ],
       "level": "observed",
-      "facts": ["插件采集、链接采集、关键词采集、导入采集、1688选品、PDD选品、海外榜单入口", "插件说明：浏览货源、采集、存入选品库或直接发布、认领店铺工作流、自动发布", "说明指出AI加工标题、描述、属性、SKU、图片"],
+      "facts": [
+        "插件采集、链接采集、关键词采集、导入采集、1688选品、PDD选品、海外榜单入口",
+        "插件说明：浏览货源、采集、存入选品库或直接发布、认领店铺工作流、自动发布",
+        "说明指出AI加工标题、描述、属性、SKU、图片"
+      ],
       "limitations": "仅浏览默认插件说明，其他采集标签未逐一执行；未安装插件或采集商品。"
     },
     {
       "id": "E03",
       "url": "https://erp.yeeke.com/collect/claim",
-      "requestIds": ["collection-detail"],
+      "requestIds": [
+        "collection-detail"
+      ],
       "level": "observed",
-      "facts": ["四步引导：选品采集、核对商品信息、认领工作流、AI工作流自动化刊登", "平台提示Shopee、Tiktok、Mercado、Ozon、Amazon", "待认领、已认领、已上架、AI核价分组", "字段包含产品信息、货源价格、SKU、包装尺寸/重量、核对状态、自动刊登、AI核价、标签、备注、采集更新信息", "操作包含认领工作流、批量AI核价、标签管理、新增商品、导入"],
+      "facts": [
+        "四步引导：选品采集、核对商品信息、认领工作流、AI工作流自动化刊登",
+        "平台提示Shopee、Tiktok、Mercado、Ozon、Amazon",
+        "待认领、已认领、已上架、AI核价分组",
+        "字段包含产品信息、货源价格、SKU、包装尺寸/重量、核对状态、自动刊登、AI核价、标签、备注、采集更新信息",
+        "操作包含认领工作流、批量AI核价、标签管理、新增商品、导入"
+      ],
       "limitations": "只记录列表结构，不收录行数据；没有执行认领或编辑。"
     },
     {
       "id": "E04",
       "url": "https://erp.yeeke.com/product/workflow",
-      "requestIds": ["listing-workflow"],
+      "requestIds": [
+        "listing-workflow"
+      ],
       "level": "observed",
-      "facts": ["任务状态：排队中、运行中、待发布、发布中、已完成、已暂停、异常", "筛选包含任务ID、平台、站点、店铺、采集来源、标签、创建时间、当前节点", "列表包含产品信息、目标店铺、进度、任务信息、时间、标签、操作"],
+      "facts": [
+        "任务状态：排队中、运行中、待发布、发布中、已完成、已暂停、异常",
+        "筛选包含任务ID、平台、站点、店铺、采集来源、标签、创建时间、当前节点",
+        "列表包含产品信息、目标店铺、进度、任务信息、时间、标签、操作"
+      ],
       "limitations": "读取时为空态；节点明细和状态迁移未验证。"
     },
     {
       "id": "E05",
       "url": "https://erp.yeeke.com/product/shopee/online-product",
-      "requestIds": ["optimize-menu", "optimize-shopee"],
+      "requestIds": [
+        "optimize-menu",
+        "optimize-shopee"
+      ],
       "level": "observed",
-      "facts": ["优化工作流侧栏有Shopee、TikTok、Mercado", "优化任务状态：待调度、运行中、已暂停、已完成、失败、待发布", "平台商品状态：在售中、已售罄、审核中、未上架、被禁售、已删除、平台已删除", "批量同步、优化、暂停、继续、发布及加入选品库入口", "字段包含商品信息、价格/重量/库存、数据、AI诊断优化、货源、尺码表、店铺/时间"],
+      "facts": [
+        "优化工作流侧栏有Shopee、TikTok、Mercado",
+        "优化任务状态：待调度、运行中、已暂停、已完成、失败、待发布",
+        "平台商品状态：在售中、已售罄、审核中、未上架、被禁售、已删除、平台已删除",
+        "批量同步、优化、暂停、继续、发布及加入选品库入口",
+        "字段包含商品信息、价格/重量/库存、数据、AI诊断优化、货源、尺码表、店铺/时间"
+      ],
       "limitations": "只进入Shopee；其他平台详情未核查。未执行批量操作。"
     },
     {
       "id": "E06",
       "url": "https://erp.yeeke.com/order/cloud",
-      "requestIds": ["orders-open"],
+      "requestIds": [
+        "orders-open"
+      ],
       "level": "observed",
-      "facts": ["待处理、待打单、待揽收、已交运、已搁置、已取消、全部队列", "安排发货、获取运单号、批量打印、批量采购、自动采购、同步、导入、导出入口", "平台、店铺、订单状态、站点、备注/标记、订单编号、下单时间筛选", "列表区分商品信息、发货信息、订单金额、物流运输、时间、操作"],
+      "facts": [
+        "待处理、待打单、待揽收、已交运、已搁置、已取消、全部队列",
+        "安排发货、获取运单号、批量打印、批量采购、自动采购、同步、导入、导出入口",
+        "平台、店铺、订单状态、站点、备注/标记、订单编号、下单时间筛选",
+        "列表区分商品信息、发货信息、订单金额、物流运输、时间、操作"
+      ],
       "limitations": "初始空态不代表无订单；未执行发货、采购、打印、同步或导出。"
     },
     {
       "id": "E07",
       "url": "https://erp.yeeke.com/product/mercado/product-workflow",
-      "requestIds": ["creative-open"],
+      "requestIds": [
+        "creative-open"
+      ],
       "level": "observed",
-      "facts": ["AI创作入口实际路由包含mercado，但页面提供通用图片创作、视频创作、POD定制", "AI生图、图片处理、商品文案、历史任务入口", "白底主图、卖点图、商品详情图、组合套图", "AI豆余额、消费记录、充值入口"],
+      "facts": [
+        "AI创作入口实际路由包含mercado，但页面提供通用图片创作、视频创作、POD定制",
+        "AI生图、图片处理、商品文案、历史任务入口",
+        "白底主图、卖点图、商品详情图、组合套图",
+        "AI豆余额、消费记录、充值入口"
+      ],
       "limitations": "不得仅从路由名认定只支持Mercado；未生成内容或扣费。"
     },
     {
       "id": "E08",
       "url": "https://erp.yeeke.com/report/store-sales-stats",
-      "requestIds": ["analytics-open"],
+      "requestIds": [
+        "analytics-open"
+      ],
       "level": "observed",
-      "facts": ["今日实时、前7天、前30天；平台、店铺分组、店铺筛选", "有效销售额、有效订单数、总销售额、总订单数、取消订单数、有效客户数、有效客单价、统计时间", "同步账单、导出入口"],
+      "facts": [
+        "今日实时、前7天、前30天；平台、店铺分组、店铺筛选",
+        "有效销售额、有效订单数、总销售额、总订单数、取消订单数、有效客户数、有效客单价、统计时间",
+        "同步账单、导出入口"
+      ],
       "limitations": "未触发账单同步和导出；有效口径、汇率及时区未验证；图标资源有连接中断警告。"
     },
     {
       "id": "E09",
       "url": "https://erp.yeeke.com/report/order-sales-stats",
-      "requestIds": ["order-stats"],
+      "requestIds": [
+        "order-stats"
+      ],
       "level": "observed",
-      "facts": ["按日期展示有效销售额、有效订单数、总销售额、总订单数、取消订单数、统计时间", "支持平台、店铺分组、店铺筛选和导出入口"],
+      "facts": [
+        "按日期展示有效销售额、有效订单数、总销售额、总订单数、取消订单数、统计时间",
+        "支持平台、店铺分组、店铺筛选和导出入口"
+      ],
       "limitations": "只记录结构；未比对实际订单与统计数值。"
     },
     {
       "id": "E10",
       "url": "https://erp.yeeke.com/account/config-center/collect-claim",
-      "requestIds": ["collection-config", "inspect-config-page"],
+      "requestIds": [
+        "collection-config",
+        "inspect-config-page"
+      ],
       "level": "observed",
-      "facts": ["采集上架配置跳转独立配置中心页面", "采集语言、无库存过滤、重复采集过滤、预售过滤、1688采集价格及图片过滤", "采集上架模式有仅采集、统一自动上架、采集时选择目标", "仅采集说明：新采集商品只进入选品库，不会自动创建上架工作流", "AI核价开关；侧栏有产品优化、运费模板、定价模板、水印模板、授权中心、用户管理等入口"],
+      "facts": [
+        "采集上架配置跳转独立配置中心页面",
+        "采集语言、无库存过滤、重复采集过滤、预售过滤、1688采集价格及图片过滤",
+        "采集上架模式有仅采集、统一自动上架、采集时选择目标",
+        "仅采集说明：新采集商品只进入选品库，不会自动创建上架工作流",
+        "AI核价开关；侧栏有产品优化、运费模板、定价模板、水印模板、授权中心、用户管理等入口"
+      ],
       "limitations": "最初误按弹窗等待超时，随后读取实际配置页；未修改、切换或保存配置。"
+    },
+    {
+      "id": "E11",
+      "url": "https://erp.yeeke.com/account/config-center/collect-claim",
+      "requestIds": [
+        "api-config-metadata",
+        "authorization-navigation",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "采集配置、店铺模板绑定、AI核价配置分别经ERP同源GET接口读取",
+        "页面自然发起track/collect POST"
+      ],
+      "limitations": "第一阶段方法和响应按页面/路径汇总；未读取正文，未保存配置。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "collect-config"
+      }
+    },
+    {
+      "id": "E12",
+      "url": "https://erp.yeeke.com/account/auth",
+      "requestIds": [
+        "store-authorization",
+        "api-collection-jobs",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "店铺授权页字段包括店铺名称、店铺ID、店铺类型、站点、授权状态、广告状态、分组、时间",
+        "shop/info下提供列表、分组及授权平台统计读取接口"
+      ],
+      "limitations": "仅记录字段名称，不保留店铺行、授权数量或凭据；未授权或解绑。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "store-authorization"
+      }
+    },
+    {
+      "id": "E13",
+      "url": "https://erp.yeeke.com/collect/claim",
+      "requestIds": [
+        "api-collection-jobs",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "pipeline/collection提供列表、认领计数、采集用户选项和标签列表GET接口"
+      ],
+      "limitations": "只加载页面；没有执行采集、核对或认领。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "collection-list"
+      }
+    },
+    {
+      "id": "E14",
+      "url": "https://erp.yeeke.com/product/workflow",
+      "requestIds": [
+        "api-collection-jobs",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "pipeline/workflow提供列表、统计、标签GET接口",
+        "pipeline/collection提供店铺与站点GET接口"
+      ],
+      "limitations": "网络空闲等待超时，但已取得相关接口HTTP200；不推断完整请求集合或任务完成。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "listing-jobs"
+      }
+    },
+    {
+      "id": "E15",
+      "url": "https://erp.yeeke.com/order/cloud",
+      "requestIds": [
+        "api-orders-reports",
+        "api-orders-state",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "自然加载订单列表发起POST orders/queryOrderList",
+        "平台状态枚举、订单队列计数、店铺类型和标签通过独立GET接口读取"
+      ],
+      "limitations": "语义表头等待失败后改查已捕获元数据及按钮；未点击同步/发货/采购；没有响应正文。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "orders"
+      }
+    },
+    {
+      "id": "E16",
+      "url": "https://erp.yeeke.com/report/store-sales-stats",
+      "requestIds": [
+        "api-reports-products",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "sales/store-stats提供GET filter-opts及POST page/list接口"
+      ],
+      "limitations": "只观察报表页面加载，不证明数据来源或聚合方式。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "store-stats"
+      }
+    },
+    {
+      "id": "E17",
+      "url": "https://erp.yeeke.com/product/shopee/online-product",
+      "requestIds": [
+        "api-reports-products",
+        "export-api-metadata"
+      ],
+      "level": "observed",
+      "facts": [
+        "通用erp/optimize/online-product路径提供列表、类目选项、统计、平台状态计数和尺码表缺失计数POST查询",
+        "batch-edit/progress GET在页面加载时出现",
+        "页面自行发起sys/userPreference/save PUT并收到HTTP200"
+      ],
+      "limitations": "未主动保存偏好或点击商品同步/优化/发布；未读取正文，无法判断偏好具体改变；一次进度请求不能证明固定轮询。",
+      "capture": {
+        "artifact": "research/api-observations.json",
+        "phase": "platform-products"
+      }
     }
   ]
 }
