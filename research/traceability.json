@@ -42,6 +42,16 @@
         "E18"
       ],
       "deliveryNotes": "本地虚构模拟器、9项实验、40项显式对比断言与50组乱序检验；不将模拟观察当作原站实现证据。"
+    },
+    {
+      "id": "0004-animation",
+      "report": "docs/iterations/0004-animation.md",
+      "changelogVersion": "0.4.0",
+      "evidenceIds": [
+        "E19",
+        "E20"
+      ],
+      "deliveryNotes": "默认Shopify上架SOP，保留ERP通用动画；官方能力、原站线索与本地编排分别标记。提供自包含HTML构建，不连接真实店铺。"
     }
   ],
   "claims": [
@@ -256,6 +266,42 @@
       ],
       "documents": [
         "docs/simulator.md"
+      ]
+    },
+    {
+      "id": "C15",
+      "level": "observed",
+      "statement": "本地Canvas动画展示17条演示路径并支持人工门禁、单步、调速与离线HTML",
+      "evidenceIds": [
+        "E20"
+      ],
+      "documents": [
+        "docs/shopify-listing-sop.md",
+        "docs/iterations/0004-animation.md"
+      ]
+    },
+    {
+      "id": "C16",
+      "level": "inferred",
+      "statement": "以Shopify官方能力设计ERP分步上架SOP与创建/库存/发布分别对账的恢复边界",
+      "evidenceIds": [
+        "E19",
+        "E20"
+      ],
+      "documents": [
+        "docs/shopify-listing-sop.md",
+        "docs/architecture.md"
+      ]
+    },
+    {
+      "id": "C17",
+      "level": "observed",
+      "statement": "Shopify官方文档中的媒体异步、ACTIVE与publication条件以及库存比较语义，非原站实现证据",
+      "evidenceIds": [
+        "E19"
+      ],
+      "documents": [
+        "docs/shopify-listing-sop.md"
       ]
     }
   ]

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ERP → Shopify 自动上架 SOP</title><meta name="description" content="以虚构数据演示Shopify自动上架SOP、任务依赖和异常兜底。"><link rel="stylesheet" href="/animation.css"><script type="module" src="/animation.js"></script></head>
+<body><main class="shell">
+<header class="masthead"><div><span class="eyebrow">ERP MIX / SHOPIFY LISTING SOP</span><h1 id="hero-title">从 ERP 商品资料，到 Shopify 渠道发布</h1><p>跟随数据包，看清 DRAFT、媒体、变体、库存与发布之间的依赖。</p></div><a class="back" href="/">打开验证实验室 ↗</a></header>
+<div class="scope"><span class="scope-dot"></span> 本地虚构演示 <span>·</span> <span id="context-scope">Shopify能力参考官方2026-10文档，ERP编排为自建设计</span> <span>·</span> 未连接或修改真实店铺</div>
+<div id="sop-rail" class="sop-rail" aria-label="Shopify上架SOP阶段"><span data-stage="0">01 ERP核对与认领</span><span data-stage="1">02 DRAFT / GID</span><span data-stage="2">03 媒体与变体</span><span data-stage="3">04 库存 / 发布门禁</span><span data-stage="4">05 ACTIVE / 渠道</span><span data-stage="5">06 回读与回写</span></div>
+<section class="toolbar" aria-label="动画控制">
+<label class="field scenario-field">选择运行场景<select id="scenario"></select></label>
+<div class="actions"><button id="play" class="primary">开始演示</button><button id="step">单步</button><button id="reset">重新开始</button></div>
+<label class="field speed-field">播放速度<select id="speed"><option value="0.6">慢速 0.6×</option><option value="1" selected>标准 1×</option><option value="2">快速 2×</option><option value="4">巡览 4×</option></select></label>
+<p id="scenario-note"></p>
+</section>
+<div class="workspace">
+<section class="stage" aria-label="系统数据流动画">
+<div class="stage-top"><div><span class="eyebrow">LIVE DATAFLOW</span><h2 id="stage-title">资料映射 → 创建草稿 → 并行配置 → 门禁 → 渠道确认</h2></div><span id="run-status" class="status">尚未开始</span></div>
+<div class="legend"><span><i class="dot teal"></i>数据 / 任务流</span><span><i class="dot amber"></i>故障接管</span><span><i class="dot blue"></i>统计事件</span><span>✓ 已经过 · 外框高亮为当前节点</span></div>
+<canvas id="system-canvas" role="img" aria-label="系统流程动画。外部数据经过连接器、校验、快照、队列和编排器，再加工刊登。故障转重试、授权、对账或人工隔离。可用右侧模块选择器读取每个节点。"></canvas>
+<div class="transport"><span id="packet-label">等待开始</span><span id="progress-label">0 个步骤</span></div>
+<div class="run-metrics"><div><small id="metric-publication-label">Shopify商品 / 创建调用</small><strong id="publication-count">0 / 0</strong></div><div><small id="metric-rejected-label">渠道发布调用</small><strong id="rejected-count">0</strong></div><div><small id="metric-amount-label">商品状态</small><strong id="amount">未创建</strong></div><div><small id="metric-pending-label">目标渠道发布</small><strong id="pending">未确认</strong></div></div>
+</section>
+<aside class="inspector">
+<section class="explanation"><span class="eyebrow">WHAT HAPPENS NEXT</span><h2 id="step-title">等待外部数据</h2><p id="step-detail"></p><p class="checkpoint">最后检查点 <strong id="checkpoint">尚未接入</strong></p><button id="resolve" class="recovery" hidden>恢复</button></section>
+<section class="dependencies"><h2>发布前的 AND 门禁</h2><div class="dependency" id="text-check"><span>ERP资料 / 文案</span><strong>未就绪</strong></div><div class="dependency" id="media-check"><span>媒体READY并关联</span><strong>未就绪</strong></div><div class="dependency shopify-only" id="variant-check"><span>变体与价格</span><strong>未就绪</strong></div><div class="dependency shopify-only" id="inventory-check"><span>Location库存</span><strong>未就绪</strong></div><div class="dependency shopify-only" id="publication-check"><span>渠道 / 权限预检</span><strong>未就绪</strong></div><div class="gate" id="gate-state">等待全部依赖</div></section>
+<section class="shopify-record shopify-only"><span class="eyebrow">DRAFT ≠ PUBLISHED</span><h2>虚构商品 · 演示T恤</h2><div class="product-state"><span id="product-state">未创建</span><span id="publication-state">目标渠道未确认</span></div><code id="product-gid">尚无Shopify GID</code><p>保存草稿GID后复用；单个步骤失败，不重新创建整件商品。</p></section>
+<section class="module-info"><label class="field">检查功能模块<select id="module-picker"></select></label><span id="module-kind" class="tag"></span><h2 id="module-title"></h2><p id="module-detail"></p><small id="module-owner"></small><code id="module-port"></code><small id="module-ref"></small><a id="module-doc" href="https://shopify.dev/docs/api/admin-graphql/2026-10" target="_blank" rel="noreferrer" hidden>查看 Shopify 官方参考 ↗</a><p class="port-note">design:// 表示建议的功能职责入口，并非已实现的HTTP接口或TCP端口。Shopify操作名仅作能力映射，本页不发送GraphQL。</p></section>
+</aside>
+</div>
+<section class="event-section"><div class="section-heading"><div><span class="eyebrow">EXECUTION TRACE</span><h2>每一步，都能看见原因和去向</h2></div><span id="event-count">0 条事件</span></div><ol id="event-log" aria-label="最近的执行记录"></ol><p id="empty-log">点击“开始演示”或“单步”，观察数据如何流转。</p><div class="sr-only" id="announcement" aria-live="polite"></div></section>
+<section class="safety-section"><span class="eyebrow">FALLBACK OWNERSHIP</span><h2>发生异常时，谁负责兜底？</h2><div class="table-wrap"><table><thead><tr><th>触发情况</th><th>接管模块</th><th>恢复条件</th><th>防止什么问题</th></tr></thead><tbody><tr><td>限流 / 临时错误</td><td>重试调度</td><td>等待结束、预算未耗尽</td><td>无限请求与平台封禁</td></tr><tr><td>授权失效</td><td>连接恢复</td><td>管理员重新确认连接</td><td>反复无效调用</td></tr><tr><td>缺字段 / 重试耗尽</td><td>隔离队列 → 人工处理台</td><td>修复后按检查点重放</td><td>脏数据、丢数据、整条链路重跑</td></tr><tr><td>刊登响应超时</td><td>发布回执对账</td><td>查到明确回执；持续未知交人工</td><td>重复刊登</td></tr><tr><td>重复 / 旧版本订单</td><td>校验与收件箱</td><td>拦截后保留较新业务版本</td><td>取消状态回退、重复计入销售</td></tr></tbody></table></div></section>
+<footer>页面观察：E01–E17 · 模拟实验：E18及本轮动画模型。Shopify能力参考官方文档；内部编排与SOP门禁是ERP自建建议，不代表原站实现或真实店铺验证。本页无OAuth、无真实Token、无AI调用和业务写入。GraphQL错误、媒体处理和发布确认均为虚构状态。<br>参考：<a href="https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/productCreate" target="_blank" rel="noreferrer">商品创建</a> · <a href="https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/fileCreate" target="_blank" rel="noreferrer">媒体异步处理</a> · <a href="https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/inventorySetQuantities" target="_blank" rel="noreferrer">库存比较更新</a> · <a href="https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/publishablePublish" target="_blank" rel="noreferrer">渠道发布</a></footer>
+</main></body></html>

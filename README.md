@@ -2,7 +2,17 @@
 
 通过 Tabbit CLI 研究 [易客 ERP 工作台](https://erp.yeeke.com/dashboard/workbench) 的实际业务页面，沉淀流程、领域边界和可追溯的架构建议。
 
-当前版本为0.3.0：完成页面研究、API边界调查和本地模拟验证。保留35条API元数据与7项原站待验证假设，新增虚构业务模拟器及9项实验，用反例改进框架。没有在原站执行采集、发布、采购、发货或付费操作；页面自身发起的跟踪及偏好保存请求已单独记录。原站观察与本地模拟证据分别标记。
+当前版本为0.4.0：完成页面研究、API边界、本地模拟与动画SOP。保留35条API元数据、7项原站待验证假设和9项核心实验；新增默认面向Shopify的上架动画（9条Shopify、8条ERP通用路径）。原站观察、Shopify官方资料和本地模型分别标记，没有真实店铺写入。
+
+## 系统运作与Shopify上架动画
+
+启动模拟器后打开 http://127.0.0.1:4173/animation 。查看数据包、并行依赖、检查点、错误接管及DRAFT/ACTIVE/渠道发布的区别。完整说明见 [Shopify上架SOP](docs/shopify-listing-sop.md)。
+
+```powershell
+npm run animation:build
+```
+
+生成 dist/erp-shopify-animation.html，可直接打开、离线播放；构建产物被忽略，源码和构建脚本已入库。
 
 ## 启动模拟器
 
@@ -21,6 +31,7 @@ npm run simulator
 5. [首轮更新报告](docs/iterations/0001-baseline.md)及[更新日志](CHANGELOG.md)。
 6. [外部API分析](docs/api-integration-analysis.md)、[REA方法说明](docs/rea-method.md)、[API元数据](research/api-observations.json)、[假设清单](research/hypotheses.json)及[第二轮报告](docs/iterations/0002-api-boundaries.md)。
 7. [模拟实验结果](research/simulation-results.json)与[第三轮报告](docs/iterations/0003-simulator.md)。本地实验验证自建方案，不证明原站内部实现。
+8. [Shopify来源](research/shopify-sources.json)、[动画验证](research/animation-results.json)及[第四轮报告](docs/iterations/0004-animation.md)。
 
 ## 开发环境
 

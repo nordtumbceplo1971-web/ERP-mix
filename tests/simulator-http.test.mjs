@@ -25,5 +25,7 @@ test('local HTTP facade keeps query POST read-only and recovers ambiguous public
     assert.equal((await fetch(base)).status, 200);
     assert.equal((await fetch(base + '/constructor')).status, 404);
     assert.equal((await fetch(base + '/__proto__')).status, 404);
+    const animation=await fetch(base+'/animation');assert.equal(animation.status,200);assert.match(await animation.text(),/system-canvas/);
+    for(const path of ['/animation.js','/animation-model.mjs','/shopify-model.mjs','/animation.css'])assert.equal((await fetch(base+path)).status,200);
   } finally { await new Promise(resolve => server.close(resolve)); }
 });

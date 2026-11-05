@@ -309,6 +309,53 @@
         "Tabbit simulator-ui-flow验证9项实验展示、超时对账、单次刊登及取消后的统计更新"
       ],
       "limitations": "仅验证自建模拟规则；无原站协议正文、真实供应商或数据库。快照恢复是内存模型的JSON恢复，不是实际崩溃耐久性。原站假设保持open。"
+    },
+    {
+      "id": "E19",
+      "kind": "official-documentation",
+      "scope": "official-documentation-only",
+      "level": "observed",
+      "artifact": "research/shopify-sources.json",
+      "facts": [
+        "Shopify官方2026-10参考区分商品创建、变体、媒体、库存、ACTIVE和publication",
+        "文件处理为异步；发布需要ACTIVE及目标publication",
+        "库存绝对设置需确认权威来源和比较检查；productSet列表有替换语义"
+      ],
+      "limitations": "仅查阅官方文档，不是原站行为证据；部分版本页重定向latest但显示2026-10。未生成可执行GraphQL或连接店铺。"
+    },
+    {
+      "id": "E20",
+      "kind": "local-experiment",
+      "scope": "local-synthetic-only",
+      "level": "observed",
+      "command": "npm run animation:record",
+      "artifact": "research/animation-results.json",
+      "scenarioIds": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14",
+        "A15",
+        "A16",
+        "A17"
+      ],
+      "facts": [
+        "17条动画路径（9条Shopify、8条ERP通用）通过168项确定性断言",
+        "依赖门禁、DRAFT/ACTIVE/渠道确认、创建未知和库存冲突被分别建模",
+        "浏览器保留页面检查确认ACTIVE但渠道未知；人工确认后创建与发布调用各一次",
+        "390px布局无横向溢出；单文件HTML从file URL打开并单步创建虚构DRAFT，切换ERP通用视角成功"
+      ],
+      "limitations": "动画模型为自建示意，不执行真实API、OAuth、AI或数据库事务。首轮长程序整页截图超时后以保留页面只读检查和视口截图完成验证；不将其描述为真实集成验收。"
     }
   ]
 }

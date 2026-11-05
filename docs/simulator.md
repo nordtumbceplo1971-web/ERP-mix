@@ -2,6 +2,8 @@
 
 版本0.3.0，Node.js 22+，零第三方依赖；不访问原站、第三方API或真实业务数据。浏览器会话与Cookie不参与模拟。
 
+工程0.4.0新增 `/animation`，默认展示Shopify上架SOP，另保留ERP通用动画。见 [SOP及离线HTML说明](shopify-listing-sop.md)。核心模型仍为0.3.0，历史实验结果不因工程版本变化而重写。
+
 ```powershell
 npm run simulator
 ```

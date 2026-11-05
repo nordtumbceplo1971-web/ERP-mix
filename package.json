@@ -1,6 +1,6 @@
 {
   "name": "erp-mix",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "ERP 业务流程研究与架构沉淀",
   "engines": { "node": ">=22" },
@@ -10,6 +10,8 @@
     "simulate": "node simulator/run.mjs",
     "simulate:record": "node simulator/run.mjs --write",
     "simulator": "node simulator/server.mjs",
+    "animation:record": "node simulator/record-animation.mjs",
+    "animation:build": "node scripts/build-animation.mjs",
     "report:new": "node scripts/new-iteration.mjs"
   }
 }

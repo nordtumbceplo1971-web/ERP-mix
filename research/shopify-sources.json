@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-05",
+  "apiVersion": "2026-10",
+  "scope": "official-documentation-only",
+  "versionNote": "版本由官方文档检索解析，随后显式检索2026-10；网页部分重定向到latest，页面选择器仍显示2026-10。未向真实店铺发送请求。",
+  "sources": [
+    {"id":"SF01","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/productCreate","facts":["productCreate创建初始变体，多变体需另行配置","创建与发布是分开的操作"]},
+    {"id":"SF02","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/productVariantsBulkCreate","facts":["可批量创建商品变体","可配置选项和变体相关数据"]},
+    {"id":"SF03","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/fileCreate","facts":["文件异步处理，需检查fileStatus","创建文件与商品媒体关联需分别确认"]},
+    {"id":"SF04","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/enums/FileStatus","facts":["FileStatus包含UPLOADED、PROCESSING、READY、FAILED","READY表示文件可显示"]},
+    {"id":"SF05","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/inventoryActivate","facts":["inventoryActivate建立库存项与Location的InventoryLevel","此版本要求按文档提供幂等键"]},
+    {"id":"SF06","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/inventorySetQuantities","facts":["绝对库存设置适用于库存权威系统","2026-04起使用changeFromQuantity做比较检查；冲突不应盲目覆盖"]},
+    {"id":"SF07","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/publishablePublish","facts":["按publication发布，需write_publications及用户权限","商品需ACTIVE才可在渠道可见","mutation返回userErrors；可回读publishedOnPublication"]},
+    {"id":"SF08","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/productUpdate","facts":["productUpdate可更新商品属性/状态，不负责变体价格批量更新"]},
+    {"id":"SF09","url":"https://shopify.dev/docs/api/admin-graphql/2026-10/mutations/productSet","facts":["用于外部数据同步，可同步或异步执行","传入列表字段时，未包含的既有列表项可能被删除，增量同步不能误作全量快照"]},
+    {"id":"SF10","url":"https://shopify.dev/docs/api/usage/limits","facts":["GraphQL Admin API按查询成本限流，限额机制不能等同于固定HTTP请求数"]}
+  ]
+}

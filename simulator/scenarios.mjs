@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { Simulator } from './engine.mjs';
+import { Simulator, SIMULATOR_MODEL_VERSION } from './engine.mjs';
 
 export const order = (changes = {}) => ({ tenant: 'demo', shop: 'shop-a', eventId: 'evt-1', externalId: 'order-1', version: 1, status: 'PENDING', amountMinor: 1000, currency: 'CNY', ...changes });
 export function setup() {
@@ -123,5 +123,5 @@ export function runScenarios() {
     check('没有盲重发', sim.job('demo', job).attempt, 1);
     return { finding: '重复键却不同内容应进入冲突处理；查不到回执不等同于平台明确拒绝，需要继续对账或人工介入。' };
   });
-  return { schemaVersion: 1, scope: 'local-synthetic-only', simulatorVersion: '0.3.0', deterministic: true, scenarios: results };
+  return { schemaVersion: 1, scope: 'local-synthetic-only', simulatorVersion: SIMULATOR_MODEL_VERSION, deterministic: true, scenarios: results };
 }

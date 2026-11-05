@@ -1,5 +1,16 @@
 # 更新日志
 
+## 0.4.0 — 2026-11-05
+
+- 新增Canvas/CSS系统运行动画，支持播放、暂停、单步、速度、模块检查、检查点和人工恢复。
+- 默认优化为ERP → Shopify自动上架SOP：核对/连接预检、DRAFT/GID、变体与媒体、location库存、ACTIVE、publication、回读回写。
+- 支持9条Shopify故障/正常路径与8条ERP通用路径；17条路径共168项模型断言。
+- 单独展示DRAFT、ACTIVE和渠道确认；创建结果未知、业务userErrors、库存冲突与发布超时分别恢复。
+- 增加单文件HTML构建，无服务器也可打开；390px布局与离线操作已验证。
+- 引入E19官方资料、E20本地动画证据；未生成或发送真实GraphQL，未连接店铺。
+
+报告：[0004-animation](docs/iterations/0004-animation.md)。溯源：[traceability.json](research/traceability.json)。
+
 ## 0.3.0 — 2026-11-05
 
 - 新建零依赖本地模拟器与交互实验页面，使用虚构数据，支持限流、授权失效、发布超时和统计延迟等故障。

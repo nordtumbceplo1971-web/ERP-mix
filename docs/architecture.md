@@ -6,6 +6,8 @@
 
 第三轮通过[本地模拟器](simulator.md)检验设计（E18）。[架构修订](architecture-refinements.md)补充了输入版本、结果未知对账、订单版本与幂等双重防护、同步事务及可重放投影。它们属于自建方案的实验结果，不提高原站实现假设的证据等级。
 
+第四轮增加[Shopify自动上架SOP](shopify-listing-sop.md)：以官方能力E19和动画模型E20设计DRAFT、配置、ACTIVE、publication及回读检查点；创建、库存与发布结果分别对账。ERP编排器与Shopify Flow应用不是同一概念；本轮未实现真实Shopify接入，亦未确认原站采用这些内部机制。
+
 ## 领域边界
 
 | 建议模块 | 责任 | 依据 |

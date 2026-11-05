@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 
+export const SIMULATOR_MODEL_VERSION = '0.3.0';
+
 const key = (...parts) => JSON.stringify(parts);
 const copy = value => structuredClone(value);
 const id = value => { assert(typeof value === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(value), 'INVALID_ID'); return value; };

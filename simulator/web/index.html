@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ERP 框架实验室</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
 <body><main>
-<header><span class="eyebrow">ERP-MIX · SYNTHETIC LAB</span><h1>ERP 框架实验室</h1><p>用虚构业务和可重复故障验证设计。所有结果仅属于本地模型，不能证明原站实现。</p></header>
+<header><span class="eyebrow">ERP-MIX · SYNTHETIC LAB</span><h1>ERP 框架实验室</h1><p>用虚构业务和可重复故障验证设计。所有结果仅属于本地模型，不能证明原站实现。</p><a href="/animation">查看系统运作动画 →</a></header>
 <section><div class="section-head"><h2>刊登与数据投影</h2><button data-command="reset">重置模拟数据</button></div><p>初始任务已核对并加工，等待发布。注入超时后，再点击推进即可查询模拟回执；推进时不会访问外部平台。</p>
 <div class="metrics"><article><small>任务状态</small><strong id="job-state">—</strong></article><article><small>平台商品 / 提交次数</small><strong id="listing-count">—</strong></article><article><small>投影有效销售额 CNY</small><strong id="amount">—</strong></article><article><small>待投影事件 / 模拟时间</small><strong id="pending">—</strong></article></div>
 <div class="controls"><button data-command="step">推进任务 / 查询回执</button><button data-command="step" data-fault="accepted-timeout">注入已受理超时</button><button data-command="step" data-fault="unknown-timeout">注入未知超时</button><button data-command="step" data-fault="rate-limit">注入限流</button><button data-command="tick">模拟时间 +1秒</button><button data-command="auth">切换授权状态</button><button data-command="pause">暂停任务</button><button data-command="resume">继续任务</button><button data-command="cancel">接收取消订单事件</button><button data-command="project">执行统计投影</button></div>

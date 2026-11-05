@@ -39,11 +39,11 @@ export function createSimulatorServer() {
         body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
         if (!body || typeof body !== 'object' || Array.isArray(body)) return send(400, { error: 'OBJECT_REQUIRED' });
       }
-      if (request.method === 'GET' && url.pathname === '/') {
+      if (request.method === 'GET' && ['/', '/animation', '/animation.html'].includes(url.pathname)) {
         response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'content-security-policy': "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'" });
-        return response.end(await readFile(new URL('./web/index.html', import.meta.url)));
+        return response.end(await readFile(new URL(url.pathname === '/' ? './web/index.html' : './web/animation.html', import.meta.url)));
       }
-      const asset = new Map([['/app.js', ['app.js', 'text/javascript']], ['/style.css', ['style.css', 'text/css']]]).get(url.pathname);
+      const asset = new Map([['/app.js', ['app.js', 'text/javascript']], ['/style.css', ['style.css', 'text/css']], ['/animation.js', ['animation.js', 'text/javascript']], ['/animation-model.mjs', ['animation-model.mjs', 'text/javascript']], ['/shopify-model.mjs', ['shopify-model.mjs', 'text/javascript']], ['/animation.css', ['animation.css', 'text/css']]]).get(url.pathname);
       if (request.method === 'GET' && asset) {
         response.writeHead(200, { 'content-type': `${asset[1]}; charset=utf-8` });
         return response.end(await readFile(new URL(`./web/${asset[0]}`, import.meta.url)));

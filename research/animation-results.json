@@ -1,0 +1,3955 @@
+{
+  "schemaVersion": 1,
+  "scope": "local-synthetic-only",
+  "modelVersion": "animation-v2-shopify-sop",
+  "nodeCount": 19,
+  "shopifyNodeCount": 19,
+  "scenarios": [
+    {
+      "id": "A01",
+      "name": "normal",
+      "title": "正常经营闭环",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 7,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 8,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 10,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 11,
+          "from": "platform",
+          "to": "outbox",
+          "label": "平台返回回执，记录完成事件"
+        },
+        {
+          "index": 12,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 13,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 14,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 15,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 16,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 17,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 18,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "name": "rate-limit",
+      "title": "外部 API 限流",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 1,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "retry",
+          "label": "429：接入被限流"
+        },
+        {
+          "index": 3,
+          "from": "retry",
+          "to": "connector",
+          "label": "等待结束，恢复接入"
+        },
+        {
+          "index": 4,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 5,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 6,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 8,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 9,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 10,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 11,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 12,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 13,
+          "from": "platform",
+          "to": "outbox",
+          "label": "平台返回回执，记录完成事件"
+        },
+        {
+          "index": 14,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 15,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 16,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 17,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 18,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 19,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 20,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "name": "auth-expired",
+      "title": "平台授权失效",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": "恢复授权",
+          "expected": "恢复授权",
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "auth",
+          "label": "授权失效，停止拉取"
+        },
+        {
+          "index": 3,
+          "from": "human",
+          "to": "auth",
+          "label": "人工确认：恢复授权"
+        },
+        {
+          "index": 4,
+          "from": "auth",
+          "to": "connector",
+          "label": "连接已恢复，从接入继续"
+        },
+        {
+          "index": 5,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 6,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 7,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 8,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 9,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 10,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 11,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 12,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 13,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 14,
+          "from": "platform",
+          "to": "outbox",
+          "label": "平台返回回执，记录完成事件"
+        },
+        {
+          "index": 15,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 16,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 17,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 18,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 19,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 20,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 21,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "name": "malformed",
+      "title": "外部数据缺字段",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": "修复并重放",
+          "expected": "修复并重放",
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "dlq",
+          "label": "缺少SKU：拒绝入业务库"
+        },
+        {
+          "index": 4,
+          "from": "dlq",
+          "to": "human",
+          "label": "等待修复输入"
+        },
+        {
+          "index": 5,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：修复并重放"
+        },
+        {
+          "index": 6,
+          "from": "human",
+          "to": "inbox",
+          "label": "补齐虚构SKU并重新校验"
+        },
+        {
+          "index": 7,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 8,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 9,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 10,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 11,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 12,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 13,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 14,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 15,
+          "from": "platform",
+          "to": "outbox",
+          "label": "平台返回回执，记录完成事件"
+        },
+        {
+          "index": 16,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 17,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 18,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 19,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 20,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 21,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 22,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A05",
+      "name": "worker-failed",
+      "title": "加工节点连续失败",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": "恢复失败节点",
+          "expected": "恢复失败节点",
+          "passed": true
+        },
+        {
+          "name": "失败时保留成功的图片检查点",
+          "actual": [
+            true,
+            false
+          ],
+          "expected": [
+            true,
+            false
+          ],
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 1,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 7,
+          "from": "text",
+          "to": "retry",
+          "label": "文案失败：仅重试文案节点"
+        },
+        {
+          "index": 8,
+          "from": "retry",
+          "to": "text",
+          "label": "预算内重试仍失败"
+        },
+        {
+          "index": 9,
+          "from": "text",
+          "to": "dlq",
+          "label": "重试预算耗尽，任务隔离"
+        },
+        {
+          "index": 10,
+          "from": "dlq",
+          "to": "human",
+          "label": "等待恢复失败节点"
+        },
+        {
+          "index": 11,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：恢复失败节点"
+        },
+        {
+          "index": 12,
+          "from": "human",
+          "to": "text",
+          "label": "文案节点恢复成功"
+        },
+        {
+          "index": 13,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 14,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 15,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 16,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 17,
+          "from": "platform",
+          "to": "outbox",
+          "label": "平台返回回执，记录完成事件"
+        },
+        {
+          "index": 18,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 19,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 20,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 21,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 22,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 23,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 24,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A06",
+      "name": "accepted-timeout",
+      "title": "刊登已受理但响应超时",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 7,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 8,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 10,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 11,
+          "from": "platform",
+          "to": "reconcile",
+          "label": "响应超时：结果未知"
+        },
+        {
+          "index": 12,
+          "from": "reconcile",
+          "to": "outbox",
+          "label": "回执确认，发布完成"
+        },
+        {
+          "index": 13,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 14,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 15,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 16,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 17,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 18,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 19,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A07",
+      "name": "unknown-timeout",
+      "title": "刊登结果持续未知",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 19900,
+          "expected": 19900,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": "模拟查到平台回执",
+          "expected": "模拟查到平台回执",
+          "passed": true
+        },
+        {
+          "name": "未确认回执时没有伪造完成",
+          "actual": [
+            false,
+            0,
+            1
+          ],
+          "expected": [
+            false,
+            0,
+            1
+          ],
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 1,
+        "rejected": 0,
+        "committedOrders": 1,
+        "projectedVersion": 1,
+        "amountMinor": 19900,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "订单v1已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 7,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 8,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 10,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 11,
+          "from": "platform",
+          "to": "reconcile",
+          "label": "响应超时：结果未知"
+        },
+        {
+          "index": 12,
+          "from": "reconcile",
+          "to": "human",
+          "label": "尚无确定回执，暂停自动处理"
+        },
+        {
+          "index": 13,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：模拟查到平台回执"
+        },
+        {
+          "index": 14,
+          "from": "human",
+          "to": "reconcile",
+          "label": "人工确认平台已受理"
+        },
+        {
+          "index": 15,
+          "from": "reconcile",
+          "to": "outbox",
+          "label": "回执确认，发布完成"
+        },
+        {
+          "index": 16,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 17,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 18,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 19,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 20,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 21,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 22,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        }
+      ]
+    },
+    {
+      "id": "A08",
+      "name": "duplicate-order",
+      "title": "订单重复与乱序",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "人工解决本地阻塞后完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "发布依赖均已就绪",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "只提交一次刊登",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "只创建一个虚构平台商品",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "平台回执已确认",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "拦截重复与过期事件",
+          "actual": 2,
+          "expected": 2,
+          "passed": true
+        },
+        {
+          "name": "统计采用最新订单版本",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "投影积压归零",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        },
+        {
+          "name": "阻塞场景不会自动越过人工动作",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 2,
+        "rejected": 2,
+        "committedOrders": 1,
+        "projectedVersion": 2,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "订单v2已提交",
+        "events": [
+          {
+            "id": "o1-v1",
+            "version": 1,
+            "status": "PENDING"
+          },
+          {
+            "id": "o1-v2",
+            "version": 2,
+            "status": "CANCELLED"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "拉取虚构商品数据"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "映射字段并校验来源"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "校验通过，保存商品草稿"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "核对并认领到虚构店铺"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "调度器领取任务"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "media",
+          "label": "并行加工：文案 + 图片"
+        },
+        {
+          "index": 7,
+          "from": "text",
+          "to": "join",
+          "label": "文案产物进入汇合门禁"
+        },
+        {
+          "index": 8,
+          "from": "media",
+          "to": "join",
+          "label": "图片产物进入汇合门禁"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "publisher",
+          "label": "所有依赖就绪，生成发布命令"
+        },
+        {
+          "index": 10,
+          "from": "publisher",
+          "to": "platform",
+          "label": "提交刊登命令"
+        },
+        {
+          "index": 11,
+          "from": "platform",
+          "to": "outbox",
+          "label": "平台返回回执，记录完成事件"
+        },
+        {
+          "index": 12,
+          "from": "outbox",
+          "to": "dashboard",
+          "label": "任务进度更新到工作台"
+        },
+        {
+          "index": 13,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 14,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 15,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 16,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 17,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 18,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        },
+        {
+          "index": 19,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v2"
+        },
+        {
+          "index": 20,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 21,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "事务提交订单、事件与游标"
+        },
+        {
+          "index": 22,
+          "from": "snapshot",
+          "to": "outbox",
+          "label": "待投影事件可靠交付"
+        },
+        {
+          "index": 23,
+          "from": "outbox",
+          "to": "stats",
+          "label": "按对象版本更新统计投影"
+        },
+        {
+          "index": 24,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "工作台读取最新统计"
+        },
+        {
+          "index": 25,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v2"
+        },
+        {
+          "index": 26,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 27,
+          "from": "inbox",
+          "to": "inbox",
+          "label": "重复事件已拦截"
+        },
+        {
+          "index": 28,
+          "from": "external",
+          "to": "connector",
+          "label": "接收到订单事件 v1"
+        },
+        {
+          "index": 29,
+          "from": "connector",
+          "to": "inbox",
+          "label": "订单映射与事件身份检查"
+        },
+        {
+          "index": 30,
+          "from": "inbox",
+          "to": "inbox",
+          "label": "过期版本已拦截"
+        }
+      ]
+    },
+    {
+      "id": "A09",
+      "name": "shopify-normal",
+      "title": "Shopify · 正常自动上架",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 8,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 10,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 11,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 12,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 13,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 14,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 15,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A10",
+      "name": "shopify-media-wait",
+      "title": "Shopify · 媒体仍在处理",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 8,
+          "from": "media",
+          "to": "retry",
+          "label": "fileCreate已受理，媒体仍PROCESSING"
+        },
+        {
+          "index": 9,
+          "from": "retry",
+          "to": "media",
+          "label": "媒体转READY，关联到商品"
+        },
+        {
+          "index": 10,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 11,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 12,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 13,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 14,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 15,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 16,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 17,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A11",
+      "name": "shopify-user-error",
+      "title": "Shopify · HTTP 200但变体报错",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": "修复变体并重放",
+          "expected": "修复变体并重放",
+          "passed": true
+        },
+        {
+          "name": "变体失败不提前激活商品",
+          "actual": [
+            "DRAFT",
+            true,
+            false
+          ],
+          "expected": [
+            "DRAFT",
+            true,
+            false
+          ],
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 8,
+          "from": "text",
+          "to": "dlq",
+          "label": "HTTP200，但变体userErrors非空"
+        },
+        {
+          "index": 9,
+          "from": "dlq",
+          "to": "human",
+          "label": "修复SKU/选项映射错误"
+        },
+        {
+          "index": 10,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：修复变体并重放"
+        },
+        {
+          "index": 11,
+          "from": "human",
+          "to": "text",
+          "label": "变体修复成功，保存variant映射"
+        },
+        {
+          "index": 12,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 13,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 14,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 15,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 16,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 17,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 18,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 19,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "shopify-stock-conflict",
+      "title": "Shopify · 库存并发冲突",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": "确认库存权威值",
+          "expected": "确认库存权威值",
+          "passed": true
+        },
+        {
+          "name": "冲突时未强制覆盖库存",
+          "actual": 0,
+          "expected": 0,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 8,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "reconcile",
+          "label": "库存比较值过期，拒绝覆盖"
+        },
+        {
+          "index": 10,
+          "from": "reconcile",
+          "to": "human",
+          "label": "确认库存权威和最新比较值"
+        },
+        {
+          "index": 11,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：确认库存权威值"
+        },
+        {
+          "index": 12,
+          "from": "human",
+          "to": "join",
+          "label": "使用已确认的最新比较值更新"
+        },
+        {
+          "index": 13,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 14,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 15,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 16,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 17,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 18,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A13",
+      "name": "shopify-throttled",
+      "title": "Shopify · GraphQL成本限流",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 1,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "retry",
+          "label": "GraphQL THROTTLED，进入等待"
+        },
+        {
+          "index": 6,
+          "from": "retry",
+          "to": "queue",
+          "label": "预算恢复，继续原节点"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 8,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 9,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 10,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 11,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 12,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 13,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 14,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 15,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 16,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 17,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A14",
+      "name": "shopify-scope-missing",
+      "title": "Shopify · 缺少发布权限",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": "模拟补齐发布权限",
+          "expected": "模拟补齐发布权限",
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "auth",
+          "label": "缺少发布权限，停止SOP"
+        },
+        {
+          "index": 4,
+          "from": "human",
+          "to": "auth",
+          "label": "人工确认：模拟补齐发布权限"
+        },
+        {
+          "index": 5,
+          "from": "auth",
+          "to": "inbox",
+          "label": "权限恢复，重新通过预检"
+        },
+        {
+          "index": 6,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 7,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 8,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 9,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 10,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 11,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 12,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 13,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 14,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 15,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 16,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 17,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 18,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A15",
+      "name": "shopify-create-timeout",
+      "title": "Shopify · 创建草稿响应丢失",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": "确认草稿来源映射",
+          "expected": "确认草稿来源映射",
+          "passed": true
+        },
+        {
+          "name": "创建结果未明时不再次创建",
+          "actual": [
+            1,
+            1,
+            null
+          ],
+          "expected": [
+            1,
+            1,
+            null
+          ],
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "reconcile",
+          "label": "草稿创建响应丢失，禁止再次创建"
+        },
+        {
+          "index": 7,
+          "from": "reconcile",
+          "to": "human",
+          "label": "等待确认来源与Shopify商品映射"
+        },
+        {
+          "index": 8,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：确认草稿来源映射"
+        },
+        {
+          "index": 9,
+          "from": "human",
+          "to": "scheduler",
+          "label": "确认原草稿GID，恢复任务"
+        },
+        {
+          "index": 10,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 11,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 12,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 13,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 14,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 15,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 16,
+          "from": "platform",
+          "to": "outbox",
+          "label": "回读商品与目标publication"
+        },
+        {
+          "index": 17,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 18,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A16",
+      "name": "shopify-publication-timeout",
+      "title": "Shopify · 渠道发布响应超时",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": null,
+          "expected": null,
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 8,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 10,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 11,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 12,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 13,
+          "from": "platform",
+          "to": "reconcile",
+          "label": "渠道发布响应超时，转回读对账"
+        },
+        {
+          "index": 14,
+          "from": "reconcile",
+          "to": "outbox",
+          "label": "回读原商品与目标渠道结果"
+        },
+        {
+          "index": 15,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 16,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    },
+    {
+      "id": "A17",
+      "name": "shopify-result-unknown",
+      "title": "Shopify · 发布结果持续未知",
+      "status": "passed",
+      "checks": [
+        {
+          "name": "解决本地阻塞后SOP完成",
+          "actual": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "name": "同一商品只创建一次",
+          "actual": [
+            1,
+            1
+          ],
+          "expected": [
+            1,
+            1
+          ],
+          "passed": true
+        },
+        {
+          "name": "只调用一次渠道发布",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "媒体READY且已关联",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "变体和库存均完成",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "商品状态为ACTIVE",
+          "actual": "ACTIVE",
+          "expected": "ACTIVE",
+          "passed": true
+        },
+        {
+          "name": "GID已保存",
+          "actual": "gid://shopify/Product/mock-1",
+          "expected": "gid://shopify/Product/mock-1",
+          "passed": true
+        },
+        {
+          "name": "目标渠道经过回读确认",
+          "actual": [
+            true,
+            true
+          ],
+          "expected": [
+            true,
+            true
+          ],
+          "passed": true
+        },
+        {
+          "name": "库存仅完成一次有效更新",
+          "actual": 1,
+          "expected": 1,
+          "passed": true
+        },
+        {
+          "name": "人工门禁不会自动跳过",
+          "actual": "模拟确认渠道已发布",
+          "expected": "模拟确认渠道已发布",
+          "passed": true
+        },
+        {
+          "name": "ACTIVE不等于渠道已发布",
+          "actual": [
+            "ACTIVE",
+            false,
+            1
+          ],
+          "expected": [
+            "ACTIVE",
+            false,
+            1
+          ],
+          "passed": true
+        }
+      ],
+      "finalState": {
+        "phase": "COMPLETED",
+        "titleReady": true,
+        "mediaReady": true,
+        "publishAttempts": 1,
+        "listings": 1,
+        "receiptConfirmed": true,
+        "orderVersion": 0,
+        "rejected": 0,
+        "committedOrders": 0,
+        "projectedVersion": 0,
+        "amountMinor": 0,
+        "pendingEvents": 0,
+        "retries": 0,
+        "checkpoint": "ACTIVE + 目标publication回读确认",
+        "events": [],
+        "profile": "shopify",
+        "sopStage": 5,
+        "productStatus": "ACTIVE",
+        "gid": "gid://shopify/Product/mock-1",
+        "remoteProducts": 1,
+        "creationAttempts": 1,
+        "variantsReady": true,
+        "inventoryReady": true,
+        "publicationReady": true,
+        "channelPublished": true,
+        "remotePublished": true,
+        "mediaLinked": true,
+        "inventoryWrites": 1,
+        "inventorySourceOfTruth": true
+      },
+      "steps": [
+        {
+          "index": 1,
+          "from": "external",
+          "to": "connector",
+          "label": "外部商品进入ERP"
+        },
+        {
+          "index": 2,
+          "from": "connector",
+          "to": "inbox",
+          "label": "检查Shopify连接与目标配置"
+        },
+        {
+          "index": 3,
+          "from": "inbox",
+          "to": "snapshot",
+          "label": "冻结资料版本，绑定上架目标"
+        },
+        {
+          "index": 4,
+          "from": "snapshot",
+          "to": "queue",
+          "label": "创建ERP上架工作流"
+        },
+        {
+          "index": 5,
+          "from": "queue",
+          "to": "scheduler",
+          "label": "productCreate：明确创建DRAFT"
+        },
+        {
+          "index": 6,
+          "from": "scheduler",
+          "to": "queue",
+          "label": "保存DRAFT GID与命令结果"
+        },
+        {
+          "index": 7,
+          "from": "queue",
+          "to": "media",
+          "label": "并行准备：变体价格 + 媒体文件"
+        },
+        {
+          "index": 8,
+          "from": "text",
+          "to": "join",
+          "label": "配置目标location与库存项"
+        },
+        {
+          "index": 9,
+          "from": "join",
+          "to": "join",
+          "label": "库存配置成功，检查业务错误"
+        },
+        {
+          "index": 10,
+          "from": "media",
+          "to": "publisher",
+          "label": "发布前AND门禁"
+        },
+        {
+          "index": 11,
+          "from": "publisher",
+          "to": "platform",
+          "label": "productUpdate：DRAFT → ACTIVE"
+        },
+        {
+          "index": 12,
+          "from": "platform",
+          "to": "platform",
+          "label": "publishablePublish：发布到指定渠道"
+        },
+        {
+          "index": 13,
+          "from": "platform",
+          "to": "reconcile",
+          "label": "渠道发布响应超时，转回读对账"
+        },
+        {
+          "index": 14,
+          "from": "reconcile",
+          "to": "human",
+          "label": "持续未知，等待人工确认"
+        },
+        {
+          "index": 15,
+          "from": "human",
+          "to": "human",
+          "label": "人工确认：模拟确认渠道已发布"
+        },
+        {
+          "index": 16,
+          "from": "human",
+          "to": "reconcile",
+          "label": "找到目标publication的发布记录"
+        },
+        {
+          "index": 17,
+          "from": "reconcile",
+          "to": "outbox",
+          "label": "回读原商品与目标渠道结果"
+        },
+        {
+          "index": 18,
+          "from": "outbox",
+          "to": "stats",
+          "label": "确认渠道发布，回写ERP映射"
+        },
+        {
+          "index": 19,
+          "from": "stats",
+          "to": "dashboard",
+          "label": "Shopify上架SOP完成"
+        }
+      ]
+    }
+  ]
+}

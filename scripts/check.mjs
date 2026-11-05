@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateApiObservations, validateHypotheses } from './research-validation.mjs';
+import { SIMULATOR_MODEL_VERSION } from '../simulator/engine.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = async path => readFile(resolve(root, path), 'utf8');
@@ -27,6 +28,18 @@ for (const item of evidence.evidence) {
     const result = JSON.parse(await read(item.artifact));
     assert.equal(result.scope, item.scope);
     for (const id of item.scenarioIds) assert(result.scenarios.some(s => s.id === id && s.status === 'passed'), `Missing simulated scenario: ${id}`);
+  } else if (item.kind === 'official-documentation') {
+    assert.equal(item.scope, 'official-documentation-only');
+    await exists(item.artifact);
+    const docs = JSON.parse(await read(item.artifact));
+    assert.equal(docs.scope, item.scope);
+    assert(docs.sources.length > 0 && docs.apiVersion);
+    const sourceIds = new Set();
+    for (const source of docs.sources) {
+      assert.equal(new URL(source.url).origin, 'https://shopify.dev');
+      assert(source.id && !sourceIds.has(source.id) && source.facts.length);
+      sourceIds.add(source.id);
+    }
   } else {
     assert(!item.kind || item.kind === 'website', 'Unknown evidence kind');
     assert.equal(new URL(item.url).origin, 'https://erp.yeeke.com');
@@ -62,9 +75,18 @@ const hypotheses = JSON.parse(await read('research/hypotheses.json'));
 validateApiObservations(api, ids);
 validateHypotheses(hypotheses, ids);
 const simulation = JSON.parse(await read('research/simulation-results.json'));
-const pkg = JSON.parse(await read('package.json'));
+const animation = JSON.parse(await read('research/animation-results.json'));
+assert.equal(animation.scope, 'local-synthetic-only');
+const animationIds = new Set();
+for (const scenario of animation.scenarios) {
+  assert(scenario.id && !animationIds.has(scenario.id));
+  animationIds.add(scenario.id);
+  assert.equal(scenario.status, 'passed');
+  assert(scenario.checks.length > 0);
+  for (const check of scenario.checks) { assert.equal(check.passed, true); assert.deepEqual(check.actual, check.expected); }
+}
 assert.equal(simulation.scope, 'local-synthetic-only');
-assert.equal(simulation.simulatorVersion, pkg.version);
+assert.equal(simulation.simulatorVersion, SIMULATOR_MODEL_VERSION);
 const scenarioIds = new Set();
 const hypothesisIds = new Set(hypotheses.hypotheses.map(h => h.id));
 for (const scenario of simulation.scenarios) {
@@ -89,4 +111,4 @@ for (const item of evidence.evidence) {
   assert.equal(item.capture.artifact, 'research/api-observations.json');
   assert(api.endpoints.some(row => row.evidenceId === item.id && row.phase === item.capture.phase), `Capture missing for ${item.id}`);
 }
-console.log(`Validated ${ids.size} evidence records, ${claims.size} claims, ${indexed.size} iteration reports, ${api.endpoints.length} API observations, ${hypotheses.hypotheses.length} hypotheses, ${scenarioIds.size} local scenarios.`);
+console.log(`Validated ${ids.size} evidence records, ${claims.size} claims, ${indexed.size} iteration reports, ${api.endpoints.length} API observations, ${hypotheses.hypotheses.length} hypotheses, ${scenarioIds.size} core + ${animationIds.size} animation scenarios.`);
