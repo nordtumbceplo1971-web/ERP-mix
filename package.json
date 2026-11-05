@@ -1,0 +1,11 @@
+{
+  "name": "erp-mix",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ERP 业务流程研究与架构沉淀",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "report:new": "node scripts/new-iteration.mjs"
+  }
+}

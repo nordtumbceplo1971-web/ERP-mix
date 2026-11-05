@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "iterations": [
+    {
+      "id": "0001-baseline",
+      "report": "docs/iterations/0001-baseline.md",
+      "changelogVersion": "0.1.0",
+      "deliveryNotes": "GitHub拒绝Token创建Actions工作流；模板移至docs/ci/validate.yml，当前仅本地校验。",
+      "evidenceIds": ["E01", "E02", "E03", "E04", "E05", "E06", "E07", "E08", "E09", "E10"]
+    }
+  ],
+  "claims": [
+    {"id":"C01","level":"observed","statement":"选品到刊登四步引导及配置分支","evidenceIds":["E02","E03","E10"],"documents":["docs/business-flows.md"]},
+    {"id":"C02","level":"observed","statement":"平台商品与任务状态分维度展示","evidenceIds":["E04","E05"],"documents":["docs/architecture.md","docs/business-flows.md"]},
+    {"id":"C03","level":"inferred","statement":"订单履约主流程及异常分支顺序","evidenceIds":["E06"],"documents":["docs/business-flows.md"]},
+    {"id":"C04","level":"observed","statement":"经营统计按店铺与日期提供不同汇总视角","evidenceIds":["E01","E08","E09"],"documents":["docs/business-flows.md"]},
+    {"id":"C05","level":"inferred","statement":"领域模块、实体及队列执行器设计","evidenceIds":["E02","E03","E04","E05","E06","E07","E08","E09","E10"],"documents":["docs/architecture.md"]},
+    {"id":"C06","level":"observed","statement":"商业入口和核心业务隔离范围","evidenceIds":["E01","E07"],"documents":["docs/commercial-boundary.md"]},
+    {"id":"C07","level":"unverified","statement":"真实采集、认领、加工、刊登和订单履约端到端效果","evidenceIds":["E02","E03","E04","E06"],"documents":["docs/business-flows.md","docs/iterations/0001-baseline.md"]}
+  ]
+}

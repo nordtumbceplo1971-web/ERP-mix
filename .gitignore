@@ -1,0 +1,9 @@
+.local/
+node_modules/
+.env
+.env.*
+!.env.example
+*cookie*
+*storage-state*
+*.har
+artifacts/private/
